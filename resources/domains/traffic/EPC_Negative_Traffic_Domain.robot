@@ -16,7 +16,9 @@ Traffic Check With Invalid Bearer ID Should Be Rejected
     Response Status Should Be    ${traffic_resp}    200
 
 Negative Traffic Scenario Starts From Clean EPC State
-    Reset EPC
+    ${reset_resp}=    Reset EPC
+    Response Status Should Be    ${reset_resp}    200
+    Response Should Contain Key    ${reset_resp}    status
 
 
 
