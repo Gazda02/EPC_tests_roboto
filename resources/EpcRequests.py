@@ -1,9 +1,8 @@
-from requests import request
+from requests import request as http_request
 
 class EpcRequests:
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
 
     @staticmethod
-    def request(self, method: str, url: str, json=None):
-        response = request(method, url, json=json)
-        return response
+    def request(method: str, url: str, json=None):
+        return http_request(method, url, json=json)

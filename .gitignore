@@ -1,1 +1,14 @@
-.idea
+.idea/
+.venv/
+__pycache__/
+*.py[cod]
+
+# Robot Framework reports
+log.html
+report.html
+output.xml
+
+# Nested report outputs
+**/log.html
+**/report.html
+**/output.xml
