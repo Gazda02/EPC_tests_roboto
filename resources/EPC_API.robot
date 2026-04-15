@@ -43,8 +43,9 @@ Delete Bearer
     RETURN    ${resp}
 
 Start Traffic
-    [Arguments]    ${ue_id}    ${bearer_id}    ${speed}
-    ${body}=    Create Dictionary    speed=${speed}
+    [Arguments]    ${ue_id}    ${bearer_id}    ${protocol}    ${mbps}
+    ${mbps}=    Convert To Integer    ${mbps}
+    ${body}=    Create Dictionary    protocol=${protocol}    Mbps=${mbps}
     ${resp}=    POST    /ues/${ue_id}/bearers/${bearer_id}/traffic    ${body}
     RETURN    ${resp}
 
