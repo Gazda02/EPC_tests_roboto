@@ -8,13 +8,13 @@ Resource          ../../EPC_Assertions.robot
 *** Keywords ***
 Single Bearer Session Is Prepared
     ${ue_resp}=    Attach UE    ${UE_VALID}
-    Response Status Should Be    ${ue_resp}    201
+    Response Status Should Be    ${ue_resp}    200
     ${bearer_resp}=    Add Bearer    ${UE_VALID}    ${BEARER_VALID}
-    Response Status Should Be    ${bearer_resp}    201
+    Response Status Should Be    ${bearer_resp}    200
 
 Traffic Is Started For Single Bearer
-    ${start_resp}=    Start Traffic    ${UE_VALID}    ${BEARER_VALID}    ${TRAFFIC_VALID}
-    Response Status Should Be    ${start_resp}    201
+    ${start_resp}=    Start Traffic    ${UE_VALID}    ${BEARER_VALID}    ${TRAFFIC_PROTOCOL}    ${TRAFFIC_VALID}
+    Response Status Should Be    ${start_resp}    200
 
 Traffic Is Visible For Single Bearer
     ${traffic_resp}=    Check Traffic    ${UE_VALID}    ${BEARER_VALID}
@@ -33,16 +33,16 @@ Single Bearer Session Is Cleaned Up
 
 Multiple Bearers Session Is Prepared
     ${ue_resp}=    Attach UE    ${UE_VALID}
-    Response Status Should Be    ${ue_resp}    201
+    Response Status Should Be    ${ue_resp}    200
     FOR    ${bearer_id}    IN    @{ALL_BEARERS}
         ${bearer_resp}=    Add Bearer    ${UE_VALID}    ${bearer_id}
-        Response Status Should Be    ${bearer_resp}    201
+        Response Status Should Be    ${bearer_resp}    200
     END
 
 Traffic Is Started For All Bearers
     FOR    ${bearer_id}    IN    @{ALL_BEARERS}
-        ${start_resp}=    Start Traffic    ${UE_VALID}    ${bearer_id}    ${TRAFFIC_VALID}
-        Response Status Should Be    ${start_resp}    201
+        ${start_resp}=    Start Traffic    ${UE_VALID}    ${bearer_id}    ${TRAFFIC_PROTOCOL}    ${TRAFFIC_VALID}
+        Response Status Should Be    ${start_resp}    200
     END
 
 Traffic Is Visible For All Bearers
