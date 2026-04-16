@@ -5,7 +5,7 @@ Suite Setup       Scenario Starts From Clean EPC State
 Suite Teardown    Scenario Starts From Clean EPC State
 
 *** Test Cases ***
-Single Bearer Traffic Should Be Visible
+01 Single Bearer Traffic Should Be Visible
     [Documentation]    Sprawdza, czy jeden użytkownik i jeden bearer mogą rozpocząć, pokazać i zakończyć transfer.
     Single Bearer Session Is Prepared
     Traffic Is Started For Single Bearer

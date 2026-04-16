@@ -4,6 +4,6 @@ Resource          ../../resources/EPC_API.robot
 Resource          ../../resources/EPC_Assertions.robot
 
 *** Test Cases ***
-EPC Root Should Respond
+01 EPC Root Should Respond
     ${resp}=    GET    /
     Response Status Should Be    ${resp}    200
