@@ -9,7 +9,7 @@ Test Teardown   Reset EPC
 
 # --- Valid ---
 
-Test attached UE should have Bearer with ID 9
+01 Test attached UE should have Bearer with ID 9
     [Documentation]     Verify that after attaching a User Equipment (UE), it automatically receives a default bearer with ID 9.
     UE 1 Should Have Bearer 9
 
