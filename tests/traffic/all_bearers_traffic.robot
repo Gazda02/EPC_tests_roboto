@@ -2,6 +2,7 @@
 Documentation     Traffic scenario for one UE using all of its bearers
 Resource          ../../resources/EPC_API.robot
 Resource          ../../resources/EPC_Assertions.robot
+Resource          ../../resources/EPC_Common.robot
 
 *** Test Cases ***
 01 UE Traffic Across All Bearers Should Be Visible In The UE Summary
@@ -21,9 +22,6 @@ Resource          ../../resources/EPC_Assertions.robot
 	Stop Traffic On All Bearers
 
 *** Keywords ***
-Prepare Clean EPC Environment
-	${resp}=    Reset EPC
-	Response Status Should Be    ${resp}    200
 
 Attach UE To Network
 	[Arguments]    ${ue_id}

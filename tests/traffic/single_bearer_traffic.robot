@@ -2,6 +2,7 @@
 Documentation     Traffic scenario for a single bearer with clear AAA structure
 Resource          ../../resources/EPC_API.robot
 Resource          ../../resources/EPC_Assertions.robot
+Resource          ../../resources/EPC_Common.robot
 
 *** Test Cases ***
 01 UE Starts And Stops Traffic On The Default Bearer
@@ -18,9 +19,6 @@ Resource          ../../resources/EPC_Assertions.robot
     Stop Traffic On The Default Bearer
 
 *** Keywords ***
-Prepare Clean EPC Environment
-    ${resp}=    Reset EPC
-    Response Status Should Be    ${resp}    200
 
 Attach UE To Network
     [Arguments]    ${ue_id}
