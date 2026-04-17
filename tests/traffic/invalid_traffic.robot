@@ -20,24 +20,15 @@ Resource          ../../resources/EPC_Common.robot
 	[Documentation]    Verifies response for traffic check on a non-existing bearer identifier.
 	# Arrange
 	Prepare Clean EPC Environment
-	Attach The Default UE
 
 	# Act
+	Attach The Default UE
 	Check Traffic For Invalid Bearer ID
 
 	# Assert
 	Verify Traffic Check Result For Invalid Bearer ID
 
 *** Keywords ***
-Attach UE To Network
-	[Arguments]    ${ue_id}
-	${resp}=    Attach UE    ${ue_id}
-	Response Status Should Be    ${resp}    200
-	Response Should Contain Key    ${resp}    status
-	Response JSON Field Should Be    ${resp}    ue_id    ${ue_id}
-
-Attach The Default UE
-	Attach UE To Network    ${UE_VALID}
 
 Check Traffic For Invalid UE ID
 	${resp}=    Check Traffic    ${UE_INVALID}    9

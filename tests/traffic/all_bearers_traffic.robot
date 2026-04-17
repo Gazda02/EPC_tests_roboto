@@ -3,15 +3,18 @@ Documentation     Traffic scenario for one UE using all of its bearers
 Resource          ../../resources/EPC_API.robot
 Resource          ../../resources/EPC_Assertions.robot
 Resource          ../../resources/EPC_Common.robot
+Resource          ../../resources/EPC_Traffic.robot
 
 *** Test Cases ***
 01 UE Traffic Across All Bearers Should Be Visible In The UE Summary
 	[Documentation]    Verifies that the default bearer and additional bearers can carry traffic and are visible in the UE details and aggregate summary.
 	# Arrange
 	Prepare Clean EPC Environment
-	Prepare UE With Additional Bearers
 
 	# Act
+	Attach The Default UE
+	Add First Additional Bearer
+	Add Second Additional Bearer
 	Start Traffic On All Bearers
 
 	# Assert
@@ -22,17 +25,10 @@ Resource          ../../resources/EPC_Common.robot
 	Stop Traffic On All Bearers
 
 *** Keywords ***
-
-Attach UE To Network
-	[Arguments]    ${ue_id}
-	${resp}=    Attach UE    ${ue_id}
-	Response Status Should Be    ${resp}    200
-	Response Should Contain Key    ${resp}    status
-	Response JSON Field Should Be    ${resp}    ue_id    ${ue_id}
-
-Prepare UE With Additional Bearers
-	Attach UE To Network    ${UE_VALID}
+Add First Additional Bearer
 	Add Bearer To UE    ${UE_VALID}    1
+
+Add Second Additional Bearer
 	Add Bearer To UE    ${UE_VALID}    ${BEARER_VALID}
 
 Add Bearer To UE
@@ -43,28 +39,11 @@ Add Bearer To UE
 	Response JSON Field Should Be    ${resp}    ue_id    ${ue_id}
 	Response JSON Field Should Be    ${resp}    bearer_id    ${bearer_id}
 
-Start Traffic On Bearer
-	[Arguments]    ${ue_id}    ${bearer_id}    ${protocol}    ${mbps}
-	${resp}=    Start Traffic    ${ue_id}    ${bearer_id}    ${protocol}    ${mbps}
-	${expected_bps}=    Evaluate    int(${mbps}) * 1000000
-	Response Status Should Be    ${resp}    200
-	Response Should Contain Key    ${resp}    status
-	Response JSON Field Should Be    ${resp}    ue_id    ${ue_id}
-	Response JSON Field Should Be    ${resp}    bearer_id    ${bearer_id}
-	Response JSON Field Should Be    ${resp}    target_bps    ${expected_bps}
-
 Start Traffic On All Bearers
 	Start Traffic On Bearer    ${UE_VALID}    9    tcp    10
 	Start Traffic On Bearer    ${UE_VALID}    1    udp    20
 	Start Traffic On Bearer    ${UE_VALID}    ${BEARER_VALID}    tcp    30
 
-Stop Traffic On Bearer
-	[Arguments]    ${ue_id}    ${bearer_id}
-	${resp}=    Stop Traffic    ${ue_id}    ${bearer_id}
-	Response Status Should Be    ${resp}    200
-	Response Should Contain Key    ${resp}    status
-	Response JSON Field Should Be    ${resp}    ue_id    ${ue_id}
-	Response JSON Field Should Be    ${resp}    bearer_id    ${bearer_id}
 
 Stop Traffic On All Bearers
 	Stop Traffic On Bearer    ${UE_VALID}    9
