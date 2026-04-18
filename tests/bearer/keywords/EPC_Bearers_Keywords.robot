@@ -58,3 +58,13 @@ UE ${ue_id} Should Have Bearer ${bearer_id}
     ${bearers}=    Get From Dictionary    ${json_body}    bearers
     ${bearer_id_str}=    Convert To String    ${bearer_id}
     Dictionary Should Contain Key    ${bearers}    ${bearer_id_str}
+
+UE With ID ${ue_id} Do Not Have Bearer With ID ${bearer_id}
+    ${resp}=    Get UE    ${ue_id}
+
+    ${json_body}=    Set Variable    ${resp.json()}
+    Dictionary Should Contain Key    ${json_body}    bearers
+
+    ${bearers}=    Get From Dictionary    ${json_body}    bearers
+    ${bearer_id_str}=    Convert To String    ${bearer_id}
+    Dictionary Should Not Contain Key    ${bearers}    ${bearer_id_str}
