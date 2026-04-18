@@ -23,3 +23,18 @@ Test Teardown   Reset EPC
     Add Bearer With ID 2 To UE With ID 1
     
     Delete Bearer With ID 2 From UE With ID 1 Response With Correct Values
+
+
+# --- Invalid ---
+
+03 Delete non-existeng bearer
+    [Documentation]    TODO
+    Attach UE With ID 1
+
+    Delete Bearer With ID 5 From UE With ID 1 Response With Bad Request
+
+04 Delete bearer without ID
+    [Documentation]    TODO
+    Attach UE With ID 1
+
+    Delete Bearer Without ID From UE With ID 1 Response With Unprocessable Entity
