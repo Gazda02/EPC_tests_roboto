@@ -38,3 +38,18 @@ Test Teardown   Reset EPC
     Attach UE With ID 1
 
     Delete Bearer Without ID From UE With ID 1 Response With Unprocessable Entity
+
+
+*** Keywords ***
+
+Delete Bearer With ID ${bearer_id} From UE With ID ${ue_id} Response With OK
+    Delete Bearer Should Response With    200   ${ue_id}    ${bearer_id}
+
+Delete Bearer Without ID From UE With ID ${ue_id} Response With Unprocessable Entity
+    Delete Bearer Should Response With    422   ${ue_id}    ''
+
+Delete Bearer With ID ${bearer_id} From UE With ID ${ue_id} Response With Correct Values
+    ${add_resp}=       Delete Bearer    ${ue_id}   ${bearer_id}
+    Response JSON Field Should Be  ${add_resp}     ue_id     ${ue_id}
+    Response JSON Field Should Be  ${add_resp}     bearer_id     ${bearer_id}
+    Response JSON Field Should Be  ${add_resp}     status     bearer_deleted
