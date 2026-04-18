@@ -23,6 +23,17 @@ Response From Add Bearer ${bearer_id} To UE ${ue_id} Should Contain Key ${key} W
     ${add_resp}=       Add Bearer    ${ue_id}   ${bearer_id}
     Response JSON Field Should Be  ${add_resp}     ${key}     ${value}
 
+Add Bearer With ID ${bearer_id} To UE With ID ${ue_id} Response With Greater Than Equal Error Type
+    ${resp}=    Add Bearer    ${ue_id}    ${bearer_id}
+    ${json}=    Set Variable    ${resp.json()}
+    ${actual_type}=    Set Variable    ${json["detail"][0]["type"]}
+    Should Be Equal As Strings    ${actual_type}    greater_than_equal
+
+Add Bearer With ID ${bearer_id} To UE With ID ${ue_id} Response With Less Than Equal Error Type
+    ${resp}=    Add Bearer    ${ue_id}    ${bearer_id}
+    ${json}=    Set Variable    ${resp.json()}
+    ${actual_type}=    Set Variable    ${json["detail"][0]["type"]}
+    Should Be Equal As Strings    ${actual_type}    less_than_equal
 
 # --- Remove bearer ---
 
