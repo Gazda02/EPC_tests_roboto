@@ -33,3 +33,37 @@ Test Teardown   Reset EPC
 
 
 # --- Invalid ---
+
+05 Add Bearer under boundary ID
+    [Documentation]    TO DO
+    Attach UE With ID 1
+    Add Bearer With ID 0 To UE With ID 1 Response With Unprocessable Entity
+    UE With ID 1 Do Not Have Bearer With ID 0
+
+06 Add Bearer above bundary ID
+    [Documentation]    TO DO
+    Attach UE With ID 1
+    Add Bearer With ID 10 To UE With ID 1 Response With Unprocessable Entity
+    UE With ID 1 Do Not Have Bearer With ID 10
+
+07 Add Bearer under boundary ID response contain correct error type
+    [Documentation]    TO DO
+    Attach UE With ID 1
+    Add Bearer With ID 0 To UE With ID 1 Response With Less Than Equal Error Type
+
+08 Add Bearer above boundary ID response contain correct error type
+    [Documentation]    TO DO
+    Attach UE With ID 1
+    Add Bearer With ID 10 To UE With ID 1 Response With Greater Than Equal Error Type
+
+09 Add Existing Bearer
+    [Documentation]    TO DO
+    Attach UE With ID 1
+    Add Bearer With ID 2 To UE With ID 1
+    Add Bearer With ID 2 To UE With ID 1 Response With Bad Request
+
+10 Add Bearer to non-existing UE
+    [Documentation]    TO DO
+    # To make sure that no UE is added already
+    Reset EPC
+    Add Bearer With ID 2 To UE With ID 1 Response With Bad Request
