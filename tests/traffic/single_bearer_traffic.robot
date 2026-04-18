@@ -8,6 +8,7 @@ Resource          ../../resources/EPC_Traffic.robot
 *** Test Cases ***
 01 UE Starts And Stops Traffic On The Default Bearer
     [Documentation]    Verifies a business scenario: the UE is attached, starts traffic, and then stops it.
+    [Tags]    traffic    single-bearer    positive
     # Arrange
     Prepare Clean EPC Environment
 

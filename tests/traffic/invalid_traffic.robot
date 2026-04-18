@@ -7,6 +7,7 @@ Resource          ../../resources/EPC_Common.robot
 *** Test Cases ***
 01 Check Traffic With Invalid UE ID
 	[Documentation]    Verifies that traffic check fails when UE does not exist.
+	[Tags]    traffic    negative    invalid-ue
 	# Arrange
 	Prepare Clean EPC Environment
 
@@ -18,6 +19,7 @@ Resource          ../../resources/EPC_Common.robot
 
 02 Check Traffic With Invalid Bearer ID
 	[Documentation]    Verifies response for traffic check on a non-existing bearer identifier.
+	[Tags]    traffic    negative    invalid-bearer
 	# Arrange
 	Prepare Clean EPC Environment
 

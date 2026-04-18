@@ -8,6 +8,7 @@ Resource          ../../resources/EPC_Traffic.robot
 *** Test Cases ***
 01 UE Traffic Across All Bearers Should Be Visible In The UE Summary
 	[Documentation]    Verifies that the default bearer and additional bearers can carry traffic and are visible in the UE details and aggregate summary.
+	[Tags]    traffic    all-bearers    aggregate    positive
 	# Arrange
 	Prepare Clean EPC Environment
 
