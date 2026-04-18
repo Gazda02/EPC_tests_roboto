@@ -2,25 +2,24 @@
 Documentation   Tests of removing bearers
 Resource        keywords/EPC_Bearers_Keywords.robot
 
-Test Setup      Attach UE With ID 1 And Add Bearer With ID 2
 Test Teardown   Reset EPC
 
 *** Test Cases ***
 
 # --- Valid ---
 
-01 Test delete correct bearer valid UE ID and Bearer ID
+01 Delete correct bearer valid UE ID and Bearer ID
     [Documentation]    Verify successful deletion of a previously added dedicated bearer.
-    Response From Delete Bearer 2 From UE 1 Should Be OK
+    Attach UE With ID 1
+    Add Bearer With ID 2 To UE With ID 1
+    
+    Delete Bearer With ID 2 From UE With ID 1 Response With OK
+    
+    UE With ID 1 Do Not Have Bearer With ID 2
 
-02 Test delete bearer response should contain correct status
-    [Documentation]    Verify that the response from deleting a bearer contains the correct "status" key with the value "bearer_deleted".
-    Response From Delete Bearer 2 From UE 1 Should Contain Key status With Value bearer_deleted
-
-03 Test delete bearer response should contain same UE ID
-    [Documentation]    Verify that the response from deleting a bearer contains the correct UE ID.
-    Response From Delete Bearer 2 From UE 1 Should Contain Key ue_id With Value 1
-
-04 Test delete bearer response should contain same Bearer ID
-    [Documentation]    Verify that the response from deleting a bearer contains the correct Bearer ID.
-    Response From Delete Bearer 2 From UE 1 Should Contain Key bearer_id With Value 2
+02 Delete bearer contain correct IDs and status
+    [Documentation]    Verify that the response from deleting a bearer contains the correct UE ID, Bearer ID and Status.
+    Attach UE With ID 1
+    Add Bearer With ID 2 To UE With ID 1
+    
+    Delete Bearer With ID 2 From UE With ID 1 Response With Correct Values
