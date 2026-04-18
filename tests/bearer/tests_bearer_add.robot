@@ -67,3 +67,7 @@ Test Teardown   Reset EPC
     # To make sure that no UE is added already
     Reset EPC
     Add Bearer With ID 2 To UE With ID 1 Response With Bad Request
+
+11 Add bearer without ID
+    Attach UE With ID 1
+    Add Bearer Without ID To UE With ID 1 Response With Unprocessable Entity
