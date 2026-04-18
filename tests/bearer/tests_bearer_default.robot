@@ -17,7 +17,7 @@ Test Teardown   Reset EPC
 # --- Invalid ---
 
 02 Remove Bearer with ID 9
-    [Documentation]    To DO
+    [Documentation]    Verify that deleting default bearer can't be achived and response status in 400 (Bad Request)
     Attach UE With ID 1
     Delete Bearer With ID 9 From UE With ID 1 Response With Bad Request
     UE With ID 1 Have Bearer With ID 9

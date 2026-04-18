@@ -28,13 +28,13 @@ Test Teardown   Reset EPC
 # --- Invalid ---
 
 03 Delete non-existeng bearer
-    [Documentation]    TODO
+    [Documentation]    Verify that attempting to delete a bearer that has not been attached to the UE results in a Bad Request error.
     Attach UE With ID 1
 
     Delete Bearer With ID 5 From UE With ID 1 Response With Bad Request
 
 04 Delete bearer without ID
-    [Documentation]    TODO
+    [Documentation]    Verify that attempting to delete a bearer without providing a bearer ID results in an Unprocessable Entity error.
     Attach UE With ID 1
 
     Delete Bearer Without ID From UE With ID 1 Response With Unprocessable Entity
@@ -43,12 +43,15 @@ Test Teardown   Reset EPC
 *** Keywords ***
 
 Delete Bearer With ID ${bearer_id} From UE With ID ${ue_id} Response With OK
+    [Documentation]    Sends a request to delete a bearer from the UE and asserts that the response status code is 200 (OK).
     Delete Bearer Should Response With    200   ${ue_id}    ${bearer_id}
 
 Delete Bearer Without ID From UE With ID ${ue_id} Response With Unprocessable Entity
+    [Documentation]    Sends a request to delete a bearer with an empty ID and asserts that the response status code is 422 (Unprocessable Entity).
     Delete Bearer Should Response With    422   ${ue_id}    ''
 
 Delete Bearer With ID ${bearer_id} From UE With ID ${ue_id} Response With Correct Values
+    [Documentation]    Deletes a bearer from the UE and verifies that the JSON response fields match the expected UE ID, bearer ID, and status indicating successful deletion.
     ${add_resp}=       Delete Bearer    ${ue_id}   ${bearer_id}
     Response JSON Field Should Be  ${add_resp}     ue_id     ${ue_id}
     Response JSON Field Should Be  ${add_resp}     bearer_id     ${bearer_id}
