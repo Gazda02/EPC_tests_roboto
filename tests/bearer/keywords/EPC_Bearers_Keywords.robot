@@ -20,7 +20,7 @@ Add Bearer With ID ${bearer_id} To UE With ID ${ue_id} Response With OK
 
 Add Bearer With ID ${bearer_id} To UE With ID ${ue_id} Response With Unprocessable Entity
     ${resp}=    Add Bearer    ${ue_id}    ${bearer_id}
-    Should Be Equal As Integers    ${resp.status_code}    200
+    Should Be Equal As Integers    ${resp.status_code}    422
 
 Add Bearer With ID ${bearer_id} To UE With ID ${ue_id} Response With Correct Values
     ${add_resp}=       Add Bearer    ${ue_id}   ${bearer_id}
