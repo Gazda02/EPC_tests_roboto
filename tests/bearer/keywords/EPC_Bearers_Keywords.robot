@@ -9,18 +9,23 @@ Resource          ../../../resources/EPC_Assertions.robot
 Attach UE With ID ${ue_id}
     Attach UE    ${ue_id}
 
+
 # --- Add bearer ---
 
 Add Bearer With ID ${bearer_id} To UE With ID ${ue_id}
     ${resp}=    Add Bearer    ${ue_id}    ${bearer_id}
 
 Add Bearer With ID ${bearer_id} To UE With ID ${ue_id} Response With OK
-    ${resp}=    Add Bearer    ${ue_id}    ${bearer_id}
-    Should Be Equal As Integers    ${resp.status_code}    200
+    Add Bearer Should Response With    200      ${ue_id}    ${bearer_id}
+
+Add Bearer With ID ${bearer_id} To UE With ID ${ue_id} Response With Bad Request
+    Add Bearer Should Response With    400      ${ue_id}    ${bearer_id}
 
 Add Bearer With ID ${bearer_id} To UE With ID ${ue_id} Response With Unprocessable Entity
-    ${resp}=    Add Bearer    ${ue_id}    ${bearer_id}
-    Should Be Equal As Integers    ${resp.status_code}    422
+    Add Bearer Should Response With    422      ${ue_id}    ${bearer_id}
+
+Add Bearer Without ID To UE With ID ${ue_id} Response With Unprocessable Entity
+    Add Bearer Should Response With    422      ${ue_id}    ''
 
 Add Bearer With ID ${bearer_id} To UE With ID ${ue_id} Response With Correct Values
     ${add_resp}=       Add Bearer    ${ue_id}   ${bearer_id}
@@ -29,22 +34,22 @@ Add Bearer With ID ${bearer_id} To UE With ID ${ue_id} Response With Correct Val
     Response JSON Field Should Be  ${add_resp}     status     bearer_added
 
 Add Bearer With ID ${bearer_id} To UE With ID ${ue_id} Response With Greater Than Equal Error Type
-    ${resp}=    Add Bearer    ${ue_id}    ${bearer_id}
-    ${json}=    Set Variable    ${resp.json()}
-    ${actual_type}=    Set Variable    ${json["detail"][0]["type"]}
-    Should Be Equal As Strings    ${actual_type}    greater_than_equal
+    Add Bearer Shuld Response With Error Type   greater_than_equal      ${ue_id}    ${bearer_id}
 
 Add Bearer With ID ${bearer_id} To UE With ID ${ue_id} Response With Less Than Equal Error Type
-    ${resp}=    Add Bearer    ${ue_id}    ${bearer_id}
-    ${json}=    Set Variable    ${resp.json()}
-    ${actual_type}=    Set Variable    ${json["detail"][0]["type"]}
-    Should Be Equal As Strings    ${actual_type}    less_than_equal
+    Add Bearer Shuld Response With Error Type   less_than_equal      ${ue_id}   ${bearer_id}
+
 
 # --- Remove bearer ---
 
 Delete Bearer With ID ${bearer_id} From UE With ID ${ue_id} Response With OK
-    ${resp}=    Delete Bearer    ${ue_id}    ${bearer_id}
-    Should Be Equal As Integers    ${resp.status_code}    200
+    Delete Bearer Should Response With    200   ${ue_id}    ${bearer_id}
+
+Delete Bearer With ID ${bearer_id} From UE With ID ${ue_id} Response With Bad Request
+    Delete Bearer Should Response With    400   ${ue_id}    ${bearer_id}
+
+Delete Bearer Without ID From UE With ID ${ue_id} Response With Unprocessable Entity
+    Delete Bearer Should Response With    422   ${ue_id}    ''
 
 Delete Bearer With ID ${bearer_id} From UE With ID ${ue_id} Response With Correct Values
     ${add_resp}=       Delete Bearer    ${ue_id}   ${bearer_id}
@@ -74,3 +79,23 @@ UE With ID ${ue_id} Do Not Have Bearer With ID ${bearer_id}
     ${bearers}=    Get From Dictionary    ${json_body}    bearers
     ${bearer_id_str}=    Convert To String    ${bearer_id}
     Dictionary Should Not Contain Key    ${bearers}    ${bearer_id_str}
+
+
+# --- Utils ---
+
+Add Bearer Should Response With
+    [Arguments]    ${expected_status}   ${ue_id}    ${bearer_id}
+    ${resp}=    Add Bearer    ${ue_id}    ${bearer_id}
+    Should Be Equal As Integers    ${resp.status_code}    ${expected_status}
+
+Add Bearer Shuld Response With Error Type
+    [Arguments]    ${expected_error_type}   ${ue_id}    ${bearer_id}
+    ${resp}=    Add Bearer    ${ue_id}    ${bearer_id}
+    ${json}=    Set Variable    ${resp.json()}
+    ${actual_type}=    Set Variable    ${json["detail"][0]["type"]}
+    Should Be Equal As Strings    ${actual_type}    ${expected_error_type}
+
+Delete Bearer Should Response With
+    [Arguments]    ${expected_status}   ${ue_id}    ${bearer_id}
+    ${resp}=    Delete Bearer    ${ue_id}    ${bearer_id}
+    Should Be Equal As Integers    ${resp.status_code}    ${expected_status}
