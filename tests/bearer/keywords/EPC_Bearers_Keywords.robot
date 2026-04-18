@@ -9,19 +9,24 @@ Resource          ../../../resources/EPC_Assertions.robot
 Attach UE With ID ${ue_id}
     Attach UE    ${ue_id}
 
-Attach UE With ID ${ue_id} And Add Bearer With ID ${bearer_id}
-    Attach UE    ${ue_id}
-    Add Bearer    ${ue_id}    ${bearer_id}
-
 # --- Add bearer ---
 
-Response From Add Bearer ${bearer_id} To UE ${ue_id} Should Be OK
+Add Bearer With ID ${bearer_id} To UE With ID ${ue_id}
+    ${resp}=    Add Bearer    ${ue_id}    ${bearer_id}
+
+Add Bearer With ID ${bearer_id} To UE With ID ${ue_id} Response With OK
     ${resp}=    Add Bearer    ${ue_id}    ${bearer_id}
     Should Be Equal As Integers    ${resp.status_code}    200
 
-Response From Add Bearer ${bearer_id} To UE ${ue_id} Should Contain Key ${key} With Value ${value}
+Add Bearer With ID ${bearer_id} To UE With ID ${ue_id} Response With Unprocessable Entity
+    ${resp}=    Add Bearer    ${ue_id}    ${bearer_id}
+    Should Be Equal As Integers    ${resp.status_code}    200
+
+Add Bearer With ID ${bearer_id} To UE With ID ${ue_id} Response With Correct Values
     ${add_resp}=       Add Bearer    ${ue_id}   ${bearer_id}
-    Response JSON Field Should Be  ${add_resp}     ${key}     ${value}
+    Response JSON Field Should Be  ${add_resp}     ue_id     ${ue_id}
+    Response JSON Field Should Be  ${add_resp}     bearer_id     ${bearer_id}
+    Response JSON Field Should Be  ${add_resp}     status     bearer_added
 
 Add Bearer With ID ${bearer_id} To UE With ID ${ue_id} Response With Greater Than Equal Error Type
     ${resp}=    Add Bearer    ${ue_id}    ${bearer_id}
@@ -37,20 +42,21 @@ Add Bearer With ID ${bearer_id} To UE With ID ${ue_id} Response With Less Than E
 
 # --- Remove bearer ---
 
-Response From Delete Bearer ${bearer_id} From UE ${ue_id} Should Be OK
+Delete Bearer With ID ${bearer_id} From UE With ID ${ue_id} Response With OK
     ${resp}=    Delete Bearer    ${ue_id}    ${bearer_id}
     Should Be Equal As Integers    ${resp.status_code}    200
 
-Response From Delete Bearer ${bearer_id} From UE ${ue_id} Should Contain Key ${key} With Value ${value}
+Delete Bearer With ID ${bearer_id} From UE With ID ${ue_id} Response With Correct Values
     ${add_resp}=       Delete Bearer    ${ue_id}   ${bearer_id}
-    Response JSON Field Should Be  ${add_resp}     ${key}     ${value}
+    Response JSON Field Should Be  ${add_resp}     ue_id     ${ue_id}
+    Response JSON Field Should Be  ${add_resp}     bearer_id     ${bearer_id}
+    Response JSON Field Should Be  ${add_resp}     status     bearer_deleted
 
 
-# --- UE have bearer ---
+# --- UE (do not) have bearer ---
 
-UE ${ue_id} Should Have Bearer ${bearer_id}
+UE With ID ${ue_id} Have Bearer With ID ${bearer_id}
     ${resp}=    Get UE    ${ue_id}
-    Should Be Equal As Integers    ${resp.status_code}    200
 
     ${json_body}=    Set Variable    ${resp.json()}
     Dictionary Should Contain Key    ${json_body}    bearers
