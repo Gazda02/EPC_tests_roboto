@@ -13,4 +13,11 @@ Test Teardown   Reset EPC
     Attach UE With ID 1
     UE With ID 1 Have Bearer With ID 9
 
+
 # --- Invalid ---
+
+02 Remove Bearer with ID 9
+    [Documentation]    To DO
+    Attach UE With ID 1
+    Delete Bearer With ID 9 From UE With ID 1 Response With Bad Request
+    UE With ID 1 Have Bearer With ID 9
