@@ -23,8 +23,22 @@ Test Teardown    Reset EPC
     # Assert
     UE With ID Should Not Have Bearer    1    2
 
+02 Remove inactive bearer
+    [Documentation]    Verify that removing an inactive bearer succeeds and the bearer is no longer present.
 
-02 Remove bearer returns correct values
+    # Arrange
+    Attach UE With ID    1
+    Add Bearer With ID 2 To UE With ID 1 Should Succeed
+    # tutaj w przyszłości możemy dodać np. End Traffic, jeśli będzie scenariusz z aktywacją
+
+    # Act
+    Delete Bearer With ID 2 From UE With ID 1 Should Succeed
+
+    # Assert
+    UE With ID Should Not Have Bearer    1    2
+
+
+03 Remove bearer returns correct values
     [Documentation]    Verify that deleting a bearer returns correct ue_id, bearer_id and status.
 
     # Arrange
@@ -37,7 +51,7 @@ Test Teardown    Reset EPC
 
 # --- Invalid ---
 
-03 Remove non-existing bearer
+04 Remove non-existing bearer
     [Documentation]    Verify that deleting a bearer that does not exist returns 400.
 
     # Arrange
@@ -47,7 +61,7 @@ Test Teardown    Reset EPC
     Delete Bearer With ID 5 From UE With ID 1 Should Fail With Status 400
 
 
-04 Remove bearer without ID
+05 Remove bearer without ID
     [Documentation]    Verify that deleting a bearer without providing an ID returns 422.
 
     # Arrange
@@ -55,6 +69,17 @@ Test Teardown    Reset EPC
 
     # Act + Assert
     Delete Bearer Without ID From UE With ID 1 Should Fail With Status 422
+
+
+06 Remove default bearer should fail
+    [Documentation]    Verify that removing the default bearer (ID 9) is not allowed and returns 400.
+
+    # Arrange
+    Attach UE With ID    1
+    # default bearer 9 is created automatically on attach
+
+    # Act + Assert
+    Delete Bearer With ID 9 From UE With ID 1 Should Fail With Status 400
 
 
 *** Keywords ***
