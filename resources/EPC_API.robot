@@ -50,8 +50,12 @@ Start Traffic
     RETURN    ${resp}
 
 Stop Traffic
-    [Arguments]    ${ue_id}    ${bearer_id}
-    ${resp}=    DELETE    /ues/${ue_id}/bearers/${bearer_id}/traffic
+    [Arguments]    ${ue_id}    ${bearer_id}=${None}
+    IF    "${bearer_id}" == "${None}"
+        ${resp}=    DELETE    /ues/${ue_id}/traffic
+    ELSE
+        ${resp}=    DELETE    /ues/${ue_id}/bearers/${bearer_id}/traffic
+    END
     RETURN    ${resp}
 
 Check Traffic
