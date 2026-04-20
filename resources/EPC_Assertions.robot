@@ -13,3 +13,9 @@ Response Should Contain Key
 Response Should Contain Message
     [Arguments]    ${resp}    ${expected}
     Should Contain    ${resp.text}    ${expected}
+
+Response JSON Field Should Be
+    [Arguments]    ${resp}    ${key}    ${expected}
+    ${payload}=    Set Variable    ${resp.json()}
+    ${actual}=    Get From Dictionary    ${payload}    ${key}
+    Should Be Equal As Strings    ${actual}    ${expected}

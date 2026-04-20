@@ -31,6 +31,11 @@ Detach UE
     ${resp}=    DELETE    /ues/${ue_id}
     RETURN    ${resp}
 
+Get UE
+    [Arguments]    ${ue_id}
+    ${resp}=    GET    /ues/${ue_id}
+    RETURN    ${resp}
+
 Add Bearer
     [Arguments]    ${ue_id}    ${bearer_id}
     ${body}=    Create Dictionary    bearer_id=${bearer_id}
