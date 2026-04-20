@@ -30,6 +30,18 @@ Resource          ../../resources/EPC_Common.robot
 	# Assert
 	Verify Traffic Check Result For Invalid Bearer ID
 
+03 End Traffic With Invalid UE ID
+	[Documentation]    Verifies that stopping traffic fails when UE does not exist.
+	[Tags]    traffic    negative    invalid-ue
+	# Arrange
+	Prepare Clean EPC Environment
+
+	# Act
+	End Traffic For Invalid UE ID
+
+	# Assert
+	Verify End Traffic Error For Invalid UE ID
+
 *** Keywords ***
 
 Check Traffic For Invalid UE ID
@@ -53,5 +65,13 @@ Verify Traffic Check Result For Invalid Bearer ID
 	Response JSON Field Should Be    ${INVALID_BEARER_TRAFFIC_RESPONSE}    tx_bps    0
 	Response JSON Field Should Be    ${INVALID_BEARER_TRAFFIC_RESPONSE}    rx_bps    0
 	Response Should Contain Key    ${INVALID_BEARER_TRAFFIC_RESPONSE}    duration
+
+End Traffic For Invalid UE ID
+	${resp}=    Stop Traffic    ${UE_INVALID}    9
+	Set Test Variable    ${INVALID_UE_STOP_RESPONSE}    ${resp}
+
+Verify End Traffic Error For Invalid UE ID
+	Response Status Should Be    ${INVALID_UE_STOP_RESPONSE}    400
+	Response Should Contain Message    ${INVALID_UE_STOP_RESPONSE}    UE not found
 
 
