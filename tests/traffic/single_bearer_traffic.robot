@@ -56,5 +56,5 @@ Stop Traffic On The Default Bearer
 Verify Traffic Is Stopped On The Default Bearer
     ${resp}=    Check Traffic    ${UE_VALID}    9
     Response Status Should Be    ${resp}    200
-    # Note: We expect stats to trend down, but strict zero is not guaranteed by the simulator immediately.
-    Response Should Contain Key    ${resp}    tx_bps
+    Response JSON Field Should Be    ${resp}    tx_bps    0
+    Response JSON Field Should Be    ${resp}    rx_bps    0

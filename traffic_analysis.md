@@ -38,3 +38,10 @@ Weryfikacja została wykonana na uruchomionym API (lokalnie), na podstawie realn
     *   `422` dla walidacji danych wejściowych (np. zakres `ue_id`),
     *   `400` dla błędu domenowego „UE not found” przy sprawdzaniu ruchu.
 *   **Rozbieżność:** Rozdział kodów jest technicznie sensowny, ale niekompletnie opisany w dokumentacji API.
+
+## 7. Dlaczego testy zakończenia traffic kończą się FAIL
+*   **Testy:** `Test end traffic for single bearer` oraz `Test end traffic for all bearers`.
+*   **Co sprawdzają testy:** Po `Stop Traffic` wykonywany jest `Check Traffic` i asercja, że `tx_bps=0` oraz `rx_bps=0`.
+*   **Co zwraca API:** Po zatrzymaniu ruchu API nadal zwraca niezerowe wartości throughput (np. `8287500493 != 0` dla single bearer i `2566108289 != 0` dla all bearers).
+*   **Wniosek:** Fail tych testów jest poprawny i wskazuje na błąd backendu w obsłudze stanu po `Stop Traffic` (brak wyzerowania throughput).
+

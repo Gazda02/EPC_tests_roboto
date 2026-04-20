@@ -25,6 +25,22 @@ Resource          ../../resources/EPC_Traffic.robot
 	# Cleanup
 	Stop Traffic On All Bearers
 
+02 End traffic for all bearers
+	[Documentation]    Verifies that stopping traffic on all bearers results in zero throughput.
+	[Tags]    traffic    all-bearers    positive
+	# Arrange
+	Prepare Clean EPC Environment
+	Attach The Default UE
+	Add First Additional Bearer
+	Add Second Additional Bearer
+	Start Traffic On All Bearers
+
+	# Act
+	Stop Traffic On All Bearers
+
+	# Assert
+	Verify All Bearers Traffic Is Stopped
+
 *** Keywords ***
 Add First Additional Bearer
 	Add Bearer To UE    ${UE_VALID}    1
@@ -45,11 +61,22 @@ Start Traffic On All Bearers
 	Start Traffic On Bearer    ${UE_VALID}    1    udp    20
 	Start Traffic On Bearer    ${UE_VALID}    ${BEARER_VALID}    tcp    30
 
-
 Stop Traffic On All Bearers
 	Stop Traffic On Bearer    ${UE_VALID}    9
 	Stop Traffic On Bearer    ${UE_VALID}    1
 	Stop Traffic On Bearer    ${UE_VALID}    ${BEARER_VALID}
+
+Verify All Bearers Traffic Is Stopped
+	Verify Bearer Traffic Status    ${UE_VALID}    9
+	Verify Bearer Traffic Status    ${UE_VALID}    1
+	Verify Bearer Traffic Status    ${UE_VALID}    ${BEARER_VALID}
+
+Verify Bearer Traffic Status
+	[Arguments]    ${ue_id}    ${bearer_id}
+	${resp}=    Check Traffic    ${ue_id}    ${bearer_id}
+	Response Status Should Be    ${resp}    200
+	Response JSON Field Should Be    ${resp}    tx_bps    0
+	Response JSON Field Should Be    ${resp}    rx_bps    0
 
 Get UE Details
 	[Arguments]    ${ue_id}
@@ -92,5 +119,3 @@ Verify UE Aggregate Summary For All Bearers
 	Response Should Contain Key    ${resp}    total_tx_bps
 	Response Should Contain Key    ${resp}    total_rx_bps
 	Response Should Contain Key    ${resp}    details
-
-
