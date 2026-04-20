@@ -65,4 +65,4 @@ Detach UE With Invalid ID
     Set Test Variable    ${DETACH_INVALID_RESPONSE}    ${resp}
 
 Verify Detach Fails For Invalid UE ID
-    Response Status Should Be    ${DETACH_INVALID_RESPONSE}    422
+    Response Status Should Be    ${DETACH_INVALID_RESPONSE}    400
