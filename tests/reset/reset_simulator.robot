@@ -10,6 +10,7 @@ Test Teardown    Reset EPC
 
 01 Reset simulator from idle state
     [Documentation]    Verify that resetting the simulator when no UE is attached succeeds and leaves the system empty.
+    [Tags]    reset    simulator    positive
 
     # Arrange
     Reset EPC
@@ -23,6 +24,7 @@ Test Teardown    Reset EPC
 
 02 Reset simulator from active state
     [Documentation]    Verify that resetting the simulator while UE and bearers exist succeeds and clears all state.
+    [Tags]    reset    simulator    positive    integration
 
     # Arrange
     Attach UE With ID    1
@@ -37,6 +39,7 @@ Test Teardown    Reset EPC
 
 03 Reset simulator should remove all bearers for all UEs
     [Documentation]    Verify that resetting the simulator removes all UEs and all their bearers.
+    [Tags]    reset    simulator    cleanup    integration
 
     # Arrange
     Attach UE With ID    1

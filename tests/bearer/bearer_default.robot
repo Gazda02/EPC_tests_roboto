@@ -10,6 +10,7 @@ Test Teardown   Reset EPC
 
 01 Attached UE has default bearer with ID 9
     [Documentation]    Verify that after attaching a UE, it automatically receives a default bearer with ID 9.
+    [Tags]    bearer    default    positive
 
     # Arrange
     Attach UE With ID    1
@@ -20,6 +21,7 @@ Test Teardown   Reset EPC
 
 02 Removing default bearer should fail
     [Documentation]    Verify that deleting the default bearer (ID 9) is not allowed and returns 400.
+    [Tags]    bearer    default    negative
 
     # Arrange
     Attach UE With ID    1

@@ -12,6 +12,7 @@ Test Teardown    Reset EPC
 
 01 Remove active bearer
     [Documentation]    Verify successful deletion of a previously added dedicated bearer.
+    [Tags]    bearer    remove    positive
 
     # Arrange
     Attach UE With ID    1
@@ -23,13 +24,14 @@ Test Teardown    Reset EPC
     # Assert
     UE With ID Should Not Have Bearer    1    2
 
+
 02 Remove inactive bearer
     [Documentation]    Verify that removing an inactive bearer succeeds and the bearer is no longer present.
+    [Tags]    bearer    remove    positive
 
     # Arrange
     Attach UE With ID    1
     Add Bearer With ID 2 To UE With ID 1 Should Succeed
-    # tutaj w przyszłości możemy dodać np. End Traffic, jeśli będzie scenariusz z aktywacją
 
     # Act
     Delete Bearer With ID 2 From UE With ID 1 Should Succeed
@@ -40,6 +42,7 @@ Test Teardown    Reset EPC
 
 03 Remove bearer returns correct values
     [Documentation]    Verify that deleting a bearer returns correct ue_id, bearer_id and status.
+    [Tags]    bearer    remove    positive    response
 
     # Arrange
     Attach UE With ID    1
@@ -53,6 +56,7 @@ Test Teardown    Reset EPC
 
 04 Remove non-existing bearer
     [Documentation]    Verify that deleting a bearer that does not exist returns 400.
+    [Tags]    bearer    remove    negative    invalid-bearer
 
     # Arrange
     Attach UE With ID    1
@@ -63,6 +67,7 @@ Test Teardown    Reset EPC
 
 05 Remove bearer without ID
     [Documentation]    Verify that deleting a bearer without providing an ID returns 422.
+    [Tags]    bearer    remove    negative    missing-id
 
     # Arrange
     Attach UE With ID    1
@@ -73,10 +78,10 @@ Test Teardown    Reset EPC
 
 06 Remove default bearer should fail
     [Documentation]    Verify that removing the default bearer (ID 9) is not allowed and returns 400.
+    [Tags]    bearer    remove    negative    default
 
     # Arrange
     Attach UE With ID    1
-    # default bearer 9 is created automatically on attach
 
     # Act + Assert
     Delete Bearer With ID 9 From UE With ID 1 Should Fail With Status 400

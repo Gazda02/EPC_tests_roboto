@@ -11,6 +11,7 @@ Test Teardown   Reset EPC
 
 01 Add bearer with valid UE ID and bearer ID
     [Documentation]    Verify that a new bearer can be added to an attached UE when valid UE ID and bearer ID are provided.
+    [Tags]    bearer    add    positive
 
     # Arrange
     Attach UE With ID    1
@@ -24,6 +25,7 @@ Test Teardown   Reset EPC
 
 02 Add bearer response contains correct IDs and status
     [Documentation]    Verify that the response from adding a bearer contains the correct UE ID, bearer ID and status.
+    [Tags]    bearer    add    positive    response
 
     # Arrange
     Attach UE With ID    1
@@ -34,6 +36,7 @@ Test Teardown   Reset EPC
 
 03 Add bearer lower boundary ID
     [Documentation]    Verify adding a bearer with the lowest allowed ID (1).
+    [Tags]    bearer    add    positive    boundary
 
     # Arrange
     Attach UE With ID    1
@@ -47,6 +50,7 @@ Test Teardown   Reset EPC
 
 04 Add bearer upper boundary ID
     [Documentation]    Verify adding a bearer with the highest allowed ID (8).
+    [Tags]    bearer    add    positive    boundary
 
     # Arrange
     Attach UE With ID    1
@@ -62,6 +66,7 @@ Test Teardown   Reset EPC
 
 05 Add bearer under boundary ID
     [Documentation]    Verify that adding a bearer with ID below allowed range (0) fails with 422.
+    [Tags]    bearer    add    negative    boundary    invalid-bearer
 
     # Arrange
     Attach UE With ID    1
@@ -75,6 +80,7 @@ Test Teardown   Reset EPC
 
 06 Add bearer above boundary ID
     [Documentation]    Verify that adding a bearer with ID above allowed range (10) fails with 422.
+    [Tags]    bearer    add    negative    boundary    invalid-bearer
 
     # Arrange
     Attach UE With ID    1
@@ -88,6 +94,7 @@ Test Teardown   Reset EPC
 
 07 Add bearer under boundary ID returns correct error type
     [Documentation]    Verify that adding bearer with ID below minimum returns 'greater_than_equal'.
+    [Tags]    bearer    add    negative    error-type    invalid-bearer
 
     # Arrange
     Attach UE With ID    1
@@ -96,9 +103,9 @@ Test Teardown   Reset EPC
     Add Bearer With ID 0 To UE With ID 1 Should Return Error Type greater_than_equal
 
 
-
 08 Add bearer above boundary ID returns correct error type
     [Documentation]    Verify that adding bearer with ID above maximum returns 'less_than_equal'.
+    [Tags]    bearer    add    negative    error-type    invalid-bearer
 
     # Arrange
     Attach UE With ID    1
@@ -109,6 +116,7 @@ Test Teardown   Reset EPC
 
 09 Add existing bearer
     [Documentation]    Verify that adding an already existing bearer returns 400.
+    [Tags]    bearer    add    negative    duplicate
 
     # Arrange
     Attach UE With ID    1
@@ -120,6 +128,7 @@ Test Teardown   Reset EPC
 
 10 Add bearer to non-existing UE
     [Documentation]    Verify that adding a bearer to a non-attached UE returns 400.
+    [Tags]    bearer    add    negative    invalid-ue
 
     # Arrange
     Reset EPC
@@ -130,6 +139,7 @@ Test Teardown   Reset EPC
 
 11 Add bearer without ID
     [Documentation]    Verify that adding a bearer without ID returns 422.
+    [Tags]    bearer    add    negative    missing-id
 
     # Arrange
     Attach UE With ID    1
