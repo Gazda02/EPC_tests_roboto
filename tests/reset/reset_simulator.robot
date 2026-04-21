@@ -50,3 +50,13 @@ Test Teardown    Reset EPC
 
     # Assert
     Simulator Should Have No UEs
+
+
+*** Keywords ***
+
+    
+Simulator Should Have No UEs
+    ${resp}=    Get All UEs
+    ${json}=    Set Variable    ${resp.json()}
+    ${count}=    Get Length    ${json["ues"]}
+    Should Be Equal As Integers    ${count}    0

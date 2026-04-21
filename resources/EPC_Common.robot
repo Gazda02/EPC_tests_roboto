@@ -20,9 +20,3 @@ Attach UE To Network
 
 Attach The Default UE
     Attach UE To Network    ${UE_VALID}
-
-Simulator Should Have No UEs
-    ${resp}=    Get All UEs
-    ${json}=    Set Variable    ${resp.json()}
-    ${count}=    Get Length    ${json["ues"]}
-    Should Be Equal As Integers    ${count}    0

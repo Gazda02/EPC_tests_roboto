@@ -76,7 +76,6 @@ Add Bearer Should Respond With Status
     [Documentation]    Adds bearer and checks only HTTP status.
     ${resp}=    Add Bearer    ${ue_id}    ${bearer_id}
     Response Status Should Be    ${resp}    ${expected_status}
-    RETURN    ${resp}
 
 
 Add Bearer Should Respond With Error Type
@@ -86,7 +85,6 @@ Add Bearer Should Respond With Error Type
     ${json}=    Set Variable    ${resp.json()}
     ${actual_type}=    Set Variable    ${json["detail"][0]["type"]}
     Should Be Equal As Strings    ${actual_type}    ${expected_error_type}
-    RETURN    ${resp}
 
 
 Delete Bearer Should Respond With Status
@@ -94,4 +92,3 @@ Delete Bearer Should Respond With Status
     [Documentation]    Deletes bearer and checks only HTTP status.
     ${resp}=    Delete Bearer    ${ue_id}    ${bearer_id}
     Response Status Should Be    ${resp}    ${expected_status}
-    RETURN    ${resp}
