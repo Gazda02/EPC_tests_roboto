@@ -48,14 +48,19 @@ Delete Bearer
     RETURN    ${resp}
 
 Start Traffic
-    [Arguments]    ${ue_id}    ${bearer_id}    ${speed}
-    ${body}=    Create Dictionary    speed=${speed}
+    [Arguments]    ${ue_id}    ${bearer_id}    ${protocol}    ${mbps}
+    ${mbps}=    Convert To Integer    ${mbps}
+    ${body}=    Create Dictionary    protocol=${protocol}    Mbps=${mbps}
     ${resp}=    POST    /ues/${ue_id}/bearers/${bearer_id}/traffic    ${body}
     RETURN    ${resp}
 
 Stop Traffic
-    [Arguments]    ${ue_id}    ${bearer_id}
-    ${resp}=    DELETE    /ues/${ue_id}/bearers/${bearer_id}/traffic
+    [Arguments]    ${ue_id}    ${bearer_id}=${None}
+    IF    "${bearer_id}" == "${None}"
+        ${resp}=    DELETE    /ues/${ue_id}/traffic
+    ELSE
+        ${resp}=    DELETE    /ues/${ue_id}/bearers/${bearer_id}/traffic
+    END
     RETURN    ${resp}
 
 Check Traffic
