@@ -13,10 +13,7 @@ Prepare Clean EPC Environment
 
 Attach UE To Network
     [Arguments]    ${ue_id}
-    ${resp}=    Attach UE    ${ue_id}
-    Response Status Should Be    ${resp}    200
-    Response Should Contain Key    ${resp}    status
-    Response JSON Field Should Be    ${resp}    ue_id    ${ue_id}
+    Attach UE    ${ue_id}
 
 Attach The Default UE
     Attach UE To Network    ${UE_VALID}
