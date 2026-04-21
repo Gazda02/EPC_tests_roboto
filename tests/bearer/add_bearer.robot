@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation   Tests of adding bearers
+Resource        ../../resources/EPC_Common.robot
 Resource        keywords/EPC_Bearers_Keywords.robot
-Resource        keywords/EPC_Bearers_HighLevel.robot
 
 Test Teardown   Reset EPC
 
@@ -14,162 +14,170 @@ Test Teardown   Reset EPC
     [Tags]    bearer    add    positive
 
     # Arrange
-    Attach UE With ID    1
+    Attach UE With ID 1
 
     # Act
-    Add Bearer With ID 2 To UE With ID 1 Should Succeed
+    Add Bearer With ID 2 To UE With ID 1 Response With OK
 
     # Assert
-    UE With ID Should Have Bearer    1    2
+    UE With ID 1 Have Bearer With ID 2
 
 
-02 Add bearer response contains correct IDs and status
-    [Documentation]    Verify that the response from adding a bearer contains the correct UE ID, bearer ID and status.
+02 Add bearer response contain correct IDs and status
+    [Documentation]    Verify that the response from adding a bearer contains the correct UE ID, bearer ID and Status.
     [Tags]    bearer    add    positive    response
 
     # Arrange
-    Attach UE With ID    1
+    Attach UE With ID 1
 
     # Act + Assert
-    Add Bearer With ID 2 To UE With ID 1 Should Return Correct Values
+    Add Bearer With ID 2 To UE With ID 1 Response With Correct Values
 
 
 03 Add bearer lower boundary ID
-    [Documentation]    Verify adding a bearer with the lowest allowed ID (1).
+    [Documentation]    Verify adding a bearer with the lowest allowed ID (ID = 1).
     [Tags]    bearer    add    positive    boundary
 
     # Arrange
-    Attach UE With ID    1
+    Attach UE With ID 1
 
     # Act
-    Add Bearer With ID 1 To UE With ID 1 Should Succeed
+    Add Bearer With ID 1 To UE With ID 1 Response With OK
 
     # Assert
-    UE With ID Should Have Bearer    1    1
+    UE With ID 1 Have Bearer With ID 1
 
 
 04 Add bearer upper boundary ID
-    [Documentation]    Verify adding a bearer with the highest allowed ID (8).
+    [Documentation]    Verify adding a bearer with the highest allowed ID bearers (ID = 8).
     [Tags]    bearer    add    positive    boundary
 
     # Arrange
-    Attach UE With ID    1
+    Attach UE With ID 1
 
     # Act
-    Add Bearer With ID 8 To UE With ID 1 Should Succeed
+    Add Bearer With ID 8 To UE With ID 1 Response With OK
 
     # Assert
-    UE With ID Should Have Bearer    1    8
+    UE With ID 1 Have Bearer With ID 8
 
 
 # --- Invalid ---
 
 05 Add bearer under boundary ID
-    [Documentation]    Verify that adding a bearer with ID below allowed range (0) fails with 422.
+    [Documentation]    Verify that attempting to add a bearer with an ID below the allowed range (ID = 0) returns an Unprocessable Entity error and the bearer is not added.
     [Tags]    bearer    add    negative    boundary    invalid-bearer
 
     # Arrange
-    Attach UE With ID    1
+    Attach UE With ID 1
 
     # Act
-    Add Bearer With ID 0 To UE With ID 1 Should Fail With Status 422
+    Add Bearer With ID 0 To UE With ID 1 Response With Unprocessable Entity
 
     # Assert
-    UE With ID Should Not Have Bearer    1    0
+    UE With ID 1 Do Not Have Bearer With ID 0
 
 
 06 Add bearer above boundary ID
-    [Documentation]    Verify that adding a bearer with ID above allowed range (10) fails with 422.
+    [Documentation]    Verify that attempting to add a bearer with an ID above the allowed range (ID = 10) returns an Unprocessable Entity error and the bearer is not added.
     [Tags]    bearer    add    negative    boundary    invalid-bearer
 
     # Arrange
-    Attach UE With ID    1
+    Attach UE With ID 1
 
     # Act
-    Add Bearer With ID 10 To UE With ID 1 Should Fail With Status 422
+    Add Bearer With ID 10 To UE With ID 1 Response With Unprocessable Entity
 
     # Assert
-    UE With ID Should Not Have Bearer    1    10
+    UE With ID 1 Do Not Have Bearer With ID 10
 
 
-07 Add bearer under boundary ID returns correct error type
-    [Documentation]    Verify that adding bearer with ID below minimum returns 'greater_than_equal'.
+07 Add bearer under boundary ID response contain correct error type
+    [Documentation]    Verify that the validation error response for an ID below the minimum boundary contains the 'greater_than_equal' error type.
     [Tags]    bearer    add    negative    error-type    invalid-bearer
 
     # Arrange
-    Attach UE With ID    1
+    Attach UE With ID 1
 
     # Act + Assert
-    Add Bearer With ID 0 To UE With ID 1 Should Return Error Type greater_than_equal
+    Add Bearer With ID 0 To UE With ID 1 Response With Greater Than Equal Error Type
 
 
-08 Add bearer above boundary ID returns correct error type
-    [Documentation]    Verify that adding bearer with ID above maximum returns 'less_than_equal'.
+08 Add bearer above boundary ID response contain correct error type
+    [Documentation]    Verify that the validation error response for an ID above the maximum boundary contains the 'less_than_equal' error type.
     [Tags]    bearer    add    negative    error-type    invalid-bearer
 
     # Arrange
-    Attach UE With ID    1
+    Attach UE With ID 1
 
     # Act + Assert
-    Add Bearer With ID 10 To UE With ID 1 Should Return Error Type less_than_equal
+    Add Bearer With ID 10 To UE With ID 1 Response With Less Than Equal Error Type
 
 
 09 Add existing bearer
-    [Documentation]    Verify that adding an already existing bearer returns 400.
+    [Documentation]    Verify that attempting to add a bearer that has already been attached to the UE results in a Bad Request error.
     [Tags]    bearer    add    negative    duplicate
 
     # Arrange
-    Attach UE With ID    1
-    Add Bearer With ID 2 To UE With ID 1 Should Succeed
+    Attach UE With ID 1
+    Add Bearer With ID 2 To UE With ID 1
 
     # Act + Assert
-    Add Bearer With ID 2 To UE With ID 1 Should Fail With Status 400
+    Add Bearer With ID 2 To UE With ID 1 Response With Bad Request
 
 
 10 Add bearer to non-existing UE
-    [Documentation]    Verify that adding a bearer to a non-attached UE returns 400.
+    [Documentation]    Verify that attempting to add a bearer to a UE that has not been attached yet results in a Bad Request error.
     [Tags]    bearer    add    negative    invalid-ue
 
     # Arrange
     Reset EPC
 
     # Act + Assert
-    Add Bearer With ID 2 To UE With ID 1 Should Fail With Status 400
+    Add Bearer With ID 2 To UE With ID 1 Response With Bad Request
 
 
 11 Add bearer without ID
-    [Documentation]    Verify that adding a bearer without ID returns 422.
+    [Documentation]    Verify that attempting to add a bearer without providing a bearer ID results in an Unprocessable Entity error.
     [Tags]    bearer    add    negative    missing-id
 
     # Arrange
-    Attach UE With ID    1
+    Attach UE With ID 1
 
     # Act + Assert
-    Add Bearer Without ID To UE With ID 1 Should Fail With Status 422
+    Add Bearer Without ID To UE With ID 1 Response With Unprocessable Entity
+
 
 
 *** Keywords ***
 
-Add Bearer With ID ${bearer_id} To UE With ID ${ue_id} Should Return Correct Values
-    ${resp}=    Add Bearer To UE    ${ue_id}    ${bearer_id}
-    Response JSON Field Should Be    ${resp}    ue_id        ${ue_id}
-    Response JSON Field Should Be    ${resp}    bearer_id    ${bearer_id}
-    Response JSON Field Should Be    ${resp}    status       bearer_added
+Add Bearer With ID ${bearer_id} To UE With ID ${ue_id} Response With OK
+    [Documentation]    Sends a request to add a bearer and asserts that the response status code is 200 (OK).
+    Add Bearer Should Response With    200      ${ue_id}    ${bearer_id}
 
-Add Bearer With ID ${bearer_id} To UE With ID ${ue_id} Should Return Error Type ${error_type}
-    ${resp}=    Add Bearer To UE    ${ue_id}    ${bearer_id}
-    ${json}=    Set Variable    ${resp.json()}
-    ${actual_type}=    Set Variable    ${json["detail"][0]["type"]}
-    Should Be Equal As Strings    ${actual_type}    ${error_type}
+Add Bearer With ID ${bearer_id} To UE With ID ${ue_id} Response With Bad Request
+    [Documentation]    Sends a request to add a bearer and asserts that the response status code is 400 (Bad Request).
+    Add Bearer Should Response With    400      ${ue_id}    ${bearer_id}
 
-Add Bearer With ID ${bearer_id} To UE With ID ${ue_id} Should Fail With Status 400
-    ${resp}=    Add Bearer To UE    ${ue_id}    ${bearer_id}
-    Response Status Should Be    ${resp}    400
+Add Bearer With ID ${bearer_id} To UE With ID ${ue_id} Response With Unprocessable Entity
+    [Documentation]    Sends a request to add a bearer and asserts that the response status code is 422 (Unprocessable Entity).
+    Add Bearer Should Response With    422      ${ue_id}    ${bearer_id}
 
-Add Bearer With ID ${bearer_id} To UE With ID ${ue_id} Should Fail With Status 422
-    ${resp}=    Add Bearer To UE    ${ue_id}    ${bearer_id}
-    Response Status Should Be    ${resp}    422
+Add Bearer Without ID To UE With ID ${ue_id} Response With Unprocessable Entity
+    [Documentation]    Sends a request to add a bearer with an empty ID and asserts that the response status code is 422 (Unprocessable Entity).
+    Add Bearer Should Response With    422      ${ue_id}    ''
 
-Add Bearer Without ID To UE With ID ${ue_id} Should Fail With Status 422
-    ${resp}=    Add Bearer To UE    ${ue_id}    ''
-    Response Status Should Be    ${resp}    422
+Add Bearer With ID ${bearer_id} To UE With ID ${ue_id} Response With Correct Values
+    [Documentation]    Adds a bearer and verifies that the JSON response fields match the expected UE ID, bearer ID, and status.
+    ${add_resp}=       Add Bearer    ${ue_id}   ${bearer_id}
+    Response JSON Field Should Be  ${add_resp}     ue_id     ${ue_id}
+    Response JSON Field Should Be  ${add_resp}     bearer_id     ${bearer_id}
+    Response JSON Field Should Be  ${add_resp}     status     bearer_added
+
+Add Bearer With ID ${bearer_id} To UE With ID ${ue_id} Response With Greater Than Equal Error Type
+    [Documentation]    Adds a bearer and verifies that the validation error type returned is 'greater_than_equal'.
+    Add Bearer Should Response With Error Type   greater_than_equal      ${ue_id}    ${bearer_id}
+
+Add Bearer With ID ${bearer_id} To UE With ID ${ue_id} Response With Less Than Equal Error Type
+    [Documentation]    Adds a bearer and verifies that the validation error type returned is 'less_than_equal'.
+    Add Bearer Should Response With Error Type   less_than_equal      ${ue_id}   ${bearer_id}

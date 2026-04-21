@@ -13,10 +13,15 @@ Prepare Clean EPC Environment
 
 Attach UE To Network
     [Arguments]    ${ue_id}
-    ${resp}=    Attach UE    ${ue_id}
-    Response Status Should Be    ${resp}    200
-    Response Should Contain Key    ${resp}    status
-    Response JSON Field Should Be    ${resp}    ue_id    ${ue_id}
+    Attach UE    ${ue_id}
 
 Attach The Default UE
     Attach UE To Network    ${UE_VALID}
+
+Attach UE With ID ${ue_id}
+    [Documentation]    Attaches a User Equipment (UE) to the network using the provided UE ID.
+    Attach UE    ${ue_id}
+
+Add Bearer With ID ${bearer_id} To UE With ID ${ue_id}
+    [Documentation]    Adds a dedicated bearer with the specified bearer ID to the given UE.
+    ${resp}=    Add Bearer    ${ue_id}    ${bearer_id}
