@@ -60,9 +60,21 @@ Resource          ../../resources/EPC_Traffic.robot
     # Assert
     Verify Start Traffic Fails For Invalid UE ID
 
+05 Start Traffic With UE Not Attached
+    [Documentation]    Verifies that traffic start fails when a valid UE ID is not attached.
+    [Tags]    traffic    start-traffic    negative    not-attached
+    # Arrange
+    Prepare Clean EPC Environment
+
+    # Act
+    Start Traffic With UE Not Attached
+
+    # Assert
+    Verify Start Traffic Fails For UE Not Attached
+
 *** Keywords ***
 Start Traffic With Valid Parameters
-    ${resp}=    Start Traffic    ${UE_VALID}    9    ${TRAFFIC_PROTOCOL}    ${TRAFFIC_VALID}
+    ${resp}=    Start Traffic    ${UE_VALID}    ${BEARER_DEFAULT}    ${TRAFFIC_PROTOCOL}    ${TRAFFIC_VALID}
     Set Test Variable    ${START_TRAFFIC_VALID_RESPONSE}    ${resp}
 
 Verify Start Traffic Succeeds
@@ -70,14 +82,14 @@ Verify Start Traffic Succeeds
     Response Status Should Be    ${START_TRAFFIC_VALID_RESPONSE}    200
     Response Should Contain Key    ${START_TRAFFIC_VALID_RESPONSE}    status
     Response JSON Field Should Be    ${START_TRAFFIC_VALID_RESPONSE}    ue_id    ${UE_VALID}
-    Response JSON Field Should Be    ${START_TRAFFIC_VALID_RESPONSE}    bearer_id    9
+    Response JSON Field Should Be    ${START_TRAFFIC_VALID_RESPONSE}    bearer_id    ${BEARER_DEFAULT}
     Response JSON Field Should Be    ${START_TRAFFIC_VALID_RESPONSE}    target_bps    ${expected_bps}
 
 Stop Traffic On Default Bearer
-    Stop Traffic On Bearer    ${UE_VALID}    9
+    Stop Traffic On Bearer    ${UE_VALID}    ${BEARER_DEFAULT}
 
 Start Traffic With Invalid Speed
-    ${resp}=    Start Traffic    ${UE_VALID}    9    ${TRAFFIC_PROTOCOL}    ${TRAFFIC_INVALID}
+    ${resp}=    Start Traffic    ${UE_VALID}    ${BEARER_DEFAULT}    ${TRAFFIC_PROTOCOL}    ${TRAFFIC_INVALID}
     Set Test Variable    ${START_TRAFFIC_INVALID_SPEED_RESPONSE}    ${resp}
 
 Verify Start Traffic Fails For Invalid Speed
@@ -92,9 +104,17 @@ Verify Start Traffic Fails For Inactive Bearer
     Response Should Contain Message    ${START_TRAFFIC_INACTIVE_BEARER_RESPONSE}    Bearer not found
 
 Start Traffic With Invalid UE ID
-    ${resp}=    Start Traffic    ${UE_INVALID}    9    ${TRAFFIC_PROTOCOL}    ${TRAFFIC_VALID}
+    ${resp}=    Start Traffic    ${UE_INVALID}    ${BEARER_DEFAULT}    ${TRAFFIC_PROTOCOL}    ${TRAFFIC_VALID}
     Set Test Variable    ${START_TRAFFIC_INVALID_UE_RESPONSE}    ${resp}
 
 Verify Start Traffic Fails For Invalid UE ID
     Response Status Should Be    ${START_TRAFFIC_INVALID_UE_RESPONSE}    400
     Response Should Contain Message    ${START_TRAFFIC_INVALID_UE_RESPONSE}    UE not found
+
+Start Traffic With UE Not Attached
+    ${resp}=    Start Traffic    ${UE_VALID}    ${BEARER_DEFAULT}    ${TRAFFIC_PROTOCOL}    ${TRAFFIC_VALID}
+    Set Test Variable    ${START_TRAFFIC_NOT_ATTACHED_RESPONSE}    ${resp}
+
+Verify Start Traffic Fails For UE Not Attached
+    Response Status Should Be    ${START_TRAFFIC_NOT_ATTACHED_RESPONSE}    400
+    Response Should Contain Message    ${START_TRAFFIC_NOT_ATTACHED_RESPONSE}    UE not found
