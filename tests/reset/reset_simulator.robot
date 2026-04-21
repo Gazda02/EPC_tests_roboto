@@ -33,3 +33,17 @@ Test Teardown    Reset EPC
 
     # Assert
     Simulator Should Have No UEs
+
+
+03 Reset simulator should remove all bearers for all UEs
+    [Documentation]    Verify that resetting the simulator removes all UEs and all their bearers.
+
+    # Arrange
+    Attach UE With ID    1
+    Add Bearer With ID 2 To UE With ID 1 Should Succeed
+
+    # Act
+    Reset EPC Should Succeed
+
+    # Assert
+    Simulator Should Have No UEs
