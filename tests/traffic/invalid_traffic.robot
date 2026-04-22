@@ -58,7 +58,7 @@ Resource          ../../resources/EPC_Common.robot
 *** Keywords ***
 
 Check Traffic For Invalid UE ID
-	${resp}=    Check Traffic    ${UE_INVALID}    9
+	${resp}=    Check Traffic    ${UE_INVALID}    ${BEARER_DEFAULT}
 	Set Test Variable    ${INVALID_UE_TRAFFIC_RESPONSE}    ${resp}
 
 Verify Traffic Check Error For Invalid UE ID
@@ -80,7 +80,7 @@ Verify Traffic Check Result For Invalid Bearer ID
 	Response Should Contain Key    ${INVALID_BEARER_TRAFFIC_RESPONSE}    duration
 
 End Traffic For Invalid UE ID
-	${resp}=    Stop Traffic    ${UE_INVALID}    9
+	${resp}=    Stop Traffic    ${UE_INVALID}    ${BEARER_DEFAULT}
 	Set Test Variable    ${INVALID_UE_STOP_RESPONSE}    ${resp}
 
 Verify End Traffic Error For Invalid UE ID

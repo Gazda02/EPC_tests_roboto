@@ -57,17 +57,17 @@ Add Bearer To UE
 	Response JSON Field Should Be    ${resp}    bearer_id    ${bearer_id}
 
 Start Traffic On All Bearers
-	Start Traffic On Bearer    ${UE_VALID}    9    tcp    10
+	Start Traffic On Bearer    ${UE_VALID}    ${BEARER_DEFAULT}    tcp    10
 	Start Traffic On Bearer    ${UE_VALID}    1    udp    20
 	Start Traffic On Bearer    ${UE_VALID}    ${BEARER_VALID}    tcp    30
 
 Stop Traffic On All Bearers
-	Stop Traffic On Bearer    ${UE_VALID}    9
+	Stop Traffic On Bearer    ${UE_VALID}    ${BEARER_DEFAULT}
 	Stop Traffic On Bearer    ${UE_VALID}    1
 	Stop Traffic On Bearer    ${UE_VALID}    ${BEARER_VALID}
 
 Verify All Bearers Traffic Is Stopped
-	Verify Bearer Traffic Status    ${UE_VALID}    9
+	Verify Bearer Traffic Status    ${UE_VALID}    ${BEARER_DEFAULT}
 	Verify Bearer Traffic Status    ${UE_VALID}    1
 	Verify Bearer Traffic Status    ${UE_VALID}    ${BEARER_VALID}
 
@@ -106,7 +106,7 @@ Verify UE Bearer Traffic In Summary
 	Response JSON Nested Object Field Should Be    ${resp}    stats    ${bearer_id}    target_bps    ${expected_bps}
 
 Verify Traffic On All Bearers
-	Verify UE Bearer Traffic In Summary    ${UE_VALID}    9    tcp    10
+	Verify UE Bearer Traffic In Summary    ${UE_VALID}    ${BEARER_DEFAULT}    tcp    10
 	Verify UE Bearer Traffic In Summary    ${UE_VALID}    1    udp    20
 	Verify UE Bearer Traffic In Summary    ${UE_VALID}    ${BEARER_VALID}    tcp    30
 
