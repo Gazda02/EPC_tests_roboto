@@ -155,9 +155,11 @@ Add Bearer With ID ${bearer_id} To UE With ID ${ue_id} Response With OK
     [Documentation]    Sends a request to add a bearer and asserts that the response status code is 200 (OK).
     Add Bearer Should Response With    200      ${ue_id}    ${bearer_id}
 
-Add Bearer With ID ${bearer_id} To UE With ID ${ue_id} Response With Bad Request
-    [Documentation]    Sends a request to add a bearer and asserts that the response status code is 400 (Bad Request).
-    Add Bearer Should Response With    400      ${ue_id}    ${bearer_id}
+Add All Bearers In Allowed Range To UE With ID ${ue_id}
+    [Documentation]    Add bearers with ID range from 1 to 8, to UE with given ID.
+    FOR    ${id}    IN RANGE    1   9
+        Add Bearer With ID ${id} To UE With ID ${ue_id}
+    END
 
 Add Bearer With ID ${bearer_id} To UE With ID ${ue_id} Response With Unprocessable Entity
     [Documentation]    Sends a request to add a bearer and asserts that the response status code is 422 (Unprocessable Entity).
