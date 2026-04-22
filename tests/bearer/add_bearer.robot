@@ -129,7 +129,7 @@ Test Teardown   Reset EPC
 
 
 09 Add existing bearer
-    [Documentation]    Verify that attempting to add a bearer that has already been attached to the UE results in a Bad Request error.
+    [Documentation]    Verify that attempting to add a bearer that has already been attached to the UE results in a Unprocessable Entity error.
     [Tags]    bearer    add    negative    duplicate
 
     # Arrange
@@ -137,18 +137,21 @@ Test Teardown   Reset EPC
     Add Bearer With ID 2 To UE With ID 1
 
     # Act + Assert
-    Add Bearer With ID 2 To UE With ID 1 Response With Bad Request
+    Add Bearer With ID 2 To UE With ID 1 Response With Unprocessable Entity
+
+    # Assert
+    UE With ID 1 Have Exacly 2 Bearers
 
 
 10 Add bearer to non-existing UE
-    [Documentation]    Verify that attempting to add a bearer to a UE that has not been attached yet results in a Bad Request error.
+    [Documentation]    Verify that attempting to add a bearer to a UE that has not been attached yet results in a Unprocessable Entity error.
     [Tags]    bearer    add    negative    invalid-ue
 
     # Arrange
     Reset EPC
 
     # Act + Assert
-    Add Bearer With ID 2 To UE With ID 1 Response With Bad Request
+    Add Bearer With ID 2 To UE With ID 1 Response With Unprocessable Entity
 
 
 11 Add bearer without ID
@@ -161,6 +164,8 @@ Test Teardown   Reset EPC
     # Act + Assert
     Add Bearer Without ID To UE With ID 1 Response With Unprocessable Entity
 
+    # Assert
+    UE With ID 1 Have Exacly 1 Bearers
 
 
 *** Keywords ***
