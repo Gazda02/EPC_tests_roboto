@@ -78,7 +78,7 @@ Test Teardown   Reset EPC
 
 # --- Invalid ---
 
-05 Add bearer under boundary ID
+06 Add bearer under boundary ID
     [Documentation]    Verify that attempting to add a bearer with an ID below the allowed range (ID = 0) returns an Unprocessable Entity error and the bearer is not added.
     [Tags]    bearer    add    negative    boundary    invalid-bearer
 
@@ -92,7 +92,7 @@ Test Teardown   Reset EPC
     UE With ID 1 Do Not Have Bearer With ID 0
 
 
-06 Add bearer above boundary ID
+07 Add bearer above boundary ID
     [Documentation]    Verify that attempting to add a bearer with an ID above the allowed range (ID = 10) returns an Unprocessable Entity error and the bearer is not added.
     [Tags]    bearer    add    negative    boundary    invalid-bearer
 
@@ -106,7 +106,7 @@ Test Teardown   Reset EPC
     UE With ID 1 Do Not Have Bearer With ID 10
 
 
-07 Add bearer under boundary ID response contain correct error type
+08 Add bearer under boundary ID response contain correct error type
     [Documentation]    Verify that the validation error response for an ID below the minimum boundary contains the 'greater_than_equal' error type.
     [Tags]    bearer    add    negative    error-type    invalid-bearer
 
@@ -117,7 +117,7 @@ Test Teardown   Reset EPC
     Add Bearer With ID 0 To UE With ID 1 Response With Greater Than Equal Error Type
 
 
-08 Add bearer above boundary ID response contain correct error type
+09 Add bearer above boundary ID response contain correct error type
     [Documentation]    Verify that the validation error response for an ID above the maximum boundary contains the 'less_than_equal' error type.
     [Tags]    bearer    add    negative    error-type    invalid-bearer
 
@@ -128,7 +128,7 @@ Test Teardown   Reset EPC
     Add Bearer With ID 10 To UE With ID 1 Response With Less Than Equal Error Type
 
 
-09 Add existing bearer
+10 Add existing bearer
     [Documentation]    Verify that attempting to add a bearer that has already been attached to the UE results in a Unprocessable Entity error.
     [Tags]    bearer    add    negative    duplicate
 
@@ -143,7 +143,7 @@ Test Teardown   Reset EPC
     UE With ID 1 Have Exacly 2 Bearers
 
 
-10 Add bearer to non-existing UE
+11 Add bearer to non-existing UE
     [Documentation]    Verify that attempting to add a bearer to a UE that has not been attached yet results in a Unprocessable Entity error.
     [Tags]    bearer    add    negative    invalid-ue
 
@@ -154,7 +154,7 @@ Test Teardown   Reset EPC
     Add Bearer With ID 2 To UE With ID 1 Response With Unprocessable Entity
 
 
-11 Add bearer without ID
+12 Add bearer without ID
     [Documentation]    Verify that attempting to add a bearer without providing a bearer ID results in an Unprocessable Entity error.
     [Tags]    bearer    add    negative    missing-id
 
