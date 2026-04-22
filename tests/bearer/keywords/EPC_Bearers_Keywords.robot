@@ -7,9 +7,9 @@ Resource          ../../../resources/EPC_Assertions.robot
 
 # --- Remove bearer ---
 
-Delete Bearer With ID ${bearer_id} From UE With ID ${ue_id} Response With Bad Request
-    [Documentation]    Attempts to delete a bearer from the UE and verifies that the response status code is 400 (Bad Request).
-    Delete Bearer Should Response With    400   ${ue_id}    ${bearer_id}
+Delete Bearer With ID ${bearer_id} From UE With ID ${ue_id} Response With Unprocessable Entity
+    [Documentation]    Attempts to delete a bearer from the UE and verifies that the response status code is 422 (Unprocessable Entity).
+    Delete Bearer Should Response With    422   ${ue_id}    ${bearer_id}
 
 
 # --- UE (do not) have bearer ---
