@@ -7,9 +7,9 @@ Resource          ../../../resources/EPC_Assertions.robot
 
 # --- Remove bearer ---
 
-Delete Bearer With ID ${bearer_id} From UE With ID ${ue_id} Response With Bad Request
-    [Documentation]    Attempts to delete a bearer from the UE and verifies that the response status code is 400 (Bad Request).
-    Delete Bearer Should Response With    400   ${ue_id}    ${bearer_id}
+Delete Bearer With ID ${bearer_id} From UE With ID ${ue_id} Response With Unprocessable Entity
+    [Documentation]    Attempts to delete a bearer from the UE and verifies that the response status code is 422 (Unprocessable Entity).
+    Delete Bearer Should Response With    422   ${ue_id}    ${bearer_id}
 
 
 # --- UE (do not) have bearer ---
@@ -35,6 +35,15 @@ UE With ID ${ue_id} Do Not Have Bearer With ID ${bearer_id}
     ${bearers}=    Get From Dictionary    ${json_body}    bearers
     ${bearer_id_str}=    Convert To String    ${bearer_id}
     Dictionary Should Not Contain Key    ${bearers}    ${bearer_id_str}
+
+UE With ID ${ue_id} Have Exacly ${bearers_count} Bearers
+    ${resp}=    Get UE    ${ue_id}
+
+    ${json_body}=    Set Variable    ${resp.json()}
+    ${bearers}=    Get From Dictionary    ${json_body}    bearers
+    ${count}=    Get Length    ${bearers}
+
+    Should Be Equal As Integers    ${count}    ${bearers_count}
 
 
 # --- Utils ---

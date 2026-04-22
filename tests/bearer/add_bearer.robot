@@ -62,6 +62,20 @@ Test Teardown   Reset EPC
     UE With ID 1 Have Bearer With ID 8
 
 
+05 Add all bearers in the allowed range
+    [Documentation]     Verify adding all bearers in allowed range (without adding default one).
+    [Tags]  bearer  add     positive    all-bearers
+
+    # Arrange
+    Attach UE With ID 1
+
+    # Act
+    Add All Bearers In Allowed Range To UE With ID 1
+
+    # Assert
+    UE With ID 1 Have Exacly 9 Bearers
+
+
 # --- Invalid ---
 
 05 Add bearer under boundary ID
@@ -115,7 +129,7 @@ Test Teardown   Reset EPC
 
 
 09 Add existing bearer
-    [Documentation]    Verify that attempting to add a bearer that has already been attached to the UE results in a Bad Request error.
+    [Documentation]    Verify that attempting to add a bearer that has already been attached to the UE results in a Unprocessable Entity error.
     [Tags]    bearer    add    negative    duplicate
 
     # Arrange
@@ -123,18 +137,21 @@ Test Teardown   Reset EPC
     Add Bearer With ID 2 To UE With ID 1
 
     # Act + Assert
-    Add Bearer With ID 2 To UE With ID 1 Response With Bad Request
+    Add Bearer With ID 2 To UE With ID 1 Response With Unprocessable Entity
+
+    # Assert
+    UE With ID 1 Have Exacly 2 Bearers
 
 
 10 Add bearer to non-existing UE
-    [Documentation]    Verify that attempting to add a bearer to a UE that has not been attached yet results in a Bad Request error.
+    [Documentation]    Verify that attempting to add a bearer to a UE that has not been attached yet results in a Unprocessable Entity error.
     [Tags]    bearer    add    negative    invalid-ue
 
     # Arrange
     Reset EPC
 
     # Act + Assert
-    Add Bearer With ID 2 To UE With ID 1 Response With Bad Request
+    Add Bearer With ID 2 To UE With ID 1 Response With Unprocessable Entity
 
 
 11 Add bearer without ID
@@ -147,6 +164,8 @@ Test Teardown   Reset EPC
     # Act + Assert
     Add Bearer Without ID To UE With ID 1 Response With Unprocessable Entity
 
+    # Assert
+    UE With ID 1 Have Exacly 1 Bearers
 
 
 *** Keywords ***
@@ -155,9 +174,11 @@ Add Bearer With ID ${bearer_id} To UE With ID ${ue_id} Response With OK
     [Documentation]    Sends a request to add a bearer and asserts that the response status code is 200 (OK).
     Add Bearer Should Response With    200      ${ue_id}    ${bearer_id}
 
-Add Bearer With ID ${bearer_id} To UE With ID ${ue_id} Response With Bad Request
-    [Documentation]    Sends a request to add a bearer and asserts that the response status code is 400 (Bad Request).
-    Add Bearer Should Response With    400      ${ue_id}    ${bearer_id}
+Add All Bearers In Allowed Range To UE With ID ${ue_id}
+    [Documentation]    Add bearers with ID range from 1 to 8, to UE with given ID.
+    FOR    ${id}    IN RANGE    1   9
+        Add Bearer With ID ${id} To UE With ID ${ue_id}
+    END
 
 Add Bearer With ID ${bearer_id} To UE With ID ${ue_id} Response With Unprocessable Entity
     [Documentation]    Sends a request to add a bearer and asserts that the response status code is 422 (Unprocessable Entity).

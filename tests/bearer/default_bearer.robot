@@ -23,14 +23,14 @@ Test Teardown   Reset EPC
 # --- Invalid ---
 
 02 Remove Bearer with ID 9
-    [Documentation]    Verify that deleting default bearer cannot be achieved and returns 400 (Bad Request).
+    [Documentation]    Verify that deleting default bearer cannot be achieved and returns 422 (Unprocessable Entity).
     [Tags]    bearer    default    negative
 
     # Arrange
     Attach UE With ID 1
 
     # Act + Assert
-    Delete Bearer With ID 9 From UE With ID 1 Response With Bad Request
+    Delete Bearer With ID 9 From UE With ID 1 Response With Unprocessable Entity
 
     # Assert
     UE With ID 1 Have Bearer With ID 9
