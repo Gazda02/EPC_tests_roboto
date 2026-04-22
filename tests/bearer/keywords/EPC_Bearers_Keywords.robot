@@ -36,6 +36,15 @@ UE With ID ${ue_id} Do Not Have Bearer With ID ${bearer_id}
     ${bearer_id_str}=    Convert To String    ${bearer_id}
     Dictionary Should Not Contain Key    ${bearers}    ${bearer_id_str}
 
+UE With ID ${ue_id} Have Exacly ${bearers_count} Bearers
+    ${resp}=    Get UE    ${ue_id}
+
+    ${json_body}=    Set Variable    ${resp.json()}
+    ${bearers}=    Get From Dictionary    ${json_body}    bearers
+    ${count}=    Get Length    ${bearers}
+
+    Should Be Equal As Integers    ${count}    ${bearers_count}
+
 
 # --- Utils ---
 
