@@ -64,8 +64,8 @@ Delete Bearer
 
 Start Traffic
     [Documentation]    Starts traffic on a specific bearer.
-    [Arguments]    ${ue_id}    ${bearer_id}    ${speed}
-    ${body}=    Create Dictionary    speed=${speed}
+    [Arguments]    ${ue_id}    ${bearer_id}    ${protocol}    ${Mbps}
+    ${body}=    Create Dictionary    protocol=${protocol}    Mbps=${Mbps}
     ${resp}=    POST    /ues/${ue_id}/bearers/${bearer_id}/traffic    ${body}
     RETURN    ${resp}
 
