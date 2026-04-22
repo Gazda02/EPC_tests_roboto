@@ -148,6 +148,11 @@ Test Teardown   Reset EPC
     Add Bearer Without ID To UE With ID 1 Response With Unprocessable Entity
 
 
+12 Add bearer for a range of valid UE and bearer IDs
+    [Documentation]    Verify that bearers can be added for a range of valid UE IDs (1–100) and bearer IDs (1–9).
+    [Tags]    bearer    add    positive    range
+
+    Add Bearers with IDs in Range 1 To 100 Of UEs And Bearer with IDs in range 1 To 8 Should Succeed
 
 *** Keywords ***
 
@@ -181,3 +186,20 @@ Add Bearer With ID ${bearer_id} To UE With ID ${ue_id} Response With Greater Tha
 Add Bearer With ID ${bearer_id} To UE With ID ${ue_id} Response With Less Than Equal Error Type
     [Documentation]    Adds a bearer and verifies that the validation error type returned is 'less_than_equal'.
     Add Bearer Should Response With Error Type   less_than_equal      ${ue_id}   ${bearer_id}
+
+Add Bearers with IDs in Range ${ue_start} To ${ue_end} Of UEs And Bearer with IDs in range ${bearer_start} To ${bearer_end} Should Succeed
+    [Documentation]    Attaches UEs in the given range and adds bearers in the given range, verifying success.
+
+    ${ue_start}=        Convert To Integer    ${ue_start}
+    ${ue_end}=          Convert To Integer    ${ue_end}
+    ${bearer_start}=    Convert To Integer    ${bearer_start}
+    ${bearer_end}=      Convert To Integer    ${bearer_end}
+
+    FOR    ${ue_id}    IN RANGE    ${ue_start}    ${ue_end + 1}
+        Attach UE With ID ${ue_id}
+
+        FOR    ${bearer_id}    IN RANGE    ${bearer_start}    ${bearer_end + 1}
+            Add Bearer With ID ${bearer_id} To UE With ID ${ue_id} Response With OK
+            UE With ID ${ue_id} Have Bearer With ID ${bearer_id}
+        END
+    END
