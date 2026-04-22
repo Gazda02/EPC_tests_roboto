@@ -39,18 +39,49 @@ Test Teardown   Reset EPC
 # --- Invalid ---
 
 03 Delete non-existing bearer
-    [Documentation]    Verify that attempting to delete a bearer that has not been attached to the UE results in a Bad Request error.
+    [Documentation]    Verify that attempting to delete a bearer that has not been attached to the UE results in a Unprocessable Entity error and don't remove any other bearer.
     [Tags]    bearer    remove    negative    invalid-bearer
 
     # Arrange
     Attach UE With ID 1
 
     # Act + Assert
-    Delete Bearer With ID 5 From UE With ID 1 Response With Bad Request
+    Delete Bearer With ID 5 From UE With ID 1 Response With Unprocessable Entity
+
+    # Assert
+    UE With ID 1 Have Exacly 1 Bearers
 
 
-04 Delete bearer without ID
-    [Documentation]    Verify that attempting to delete a bearer without providing a bearer ID results in an Unprocessable Entity error.
+04 Delete bearer under boundary ID
+    [Documentation]    Verify that attempting to delete a bearer with an ID below the allowed range (ID = 0) returns an Unprocessable Entity error and don't remove any other bearer.
+    [Tags]    bearer    remove    negative    missing-id
+
+    # Arrange
+    Attach UE With ID 1
+
+    # Act + Assert
+    Delete Bearer With ID 0 From UE With ID 1 Response With Unprocessable Entity
+
+    # Assert
+    UE With ID 1 Have Exacly 1 Bearers
+
+
+05 Delete bearer above boundary ID
+    [Documentation]    Verify that attempting to delete a bearer with an ID above the allowed range (ID = 10) returns an Unprocessable Entity error and don't remove any other bearer.
+    [Tags]    bearer    remove    negative    missing-id
+
+    # Arrange
+    Attach UE With ID 1
+
+    # Act + Assert
+    Delete Bearer With ID 10 From UE With ID 1 Response With Unprocessable Entity
+
+    # Assert
+    UE With ID 1 Have Exacly 1 Bearers
+
+
+06 Delete bearer without ID
+    [Documentation]    Verify that attempting to delete a bearer without providing a bearer ID results in an Unprocessable Entity error and don't remove any other bearer
     [Tags]    bearer    remove    negative    missing-id
 
     # Arrange
@@ -58,6 +89,9 @@ Test Teardown   Reset EPC
 
     # Act + Assert
     Delete Bearer Without ID From UE With ID 1 Response With Unprocessable Entity
+
+    # Assert
+    UE With ID 1 Have Exacly 1 Bearers
 
 
 *** Keywords ***
