@@ -62,6 +62,20 @@ Test Teardown   Reset EPC
     UE With ID 1 Have Bearer With ID 8
 
 
+05 Add all bearers in the allowed range
+    [Documentation]     Verify adding all bearers in allowed range (without adding default one).
+    [Tags]  bearer  add     positive    all-bearers
+
+    # Arrange
+    Attach UE With ID 1
+
+    # Act
+    Add All Bearers In Allowed Range To UE With ID 1
+
+    # Assert
+    UE With ID 1 Have Exacly 9 Bearers
+
+
 # --- Invalid ---
 
 05 Add bearer under boundary ID
