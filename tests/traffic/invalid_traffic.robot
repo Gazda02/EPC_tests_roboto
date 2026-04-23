@@ -55,6 +55,35 @@ Resource          ../../resources/EPC_Common.robot
 	# Assert
 	Verify End Traffic Error For Invalid Bearer ID
 
+05 Start Traffic With Negative Throughput
+	[Documentation]    Verifies that traffic speed out of range (negative value) returns an error.
+	[Tags]    exploratory    traffic    validation    negative
+	# Arrange
+	Prepare Clean EPC Environment
+	Attach UE With ID 11
+	Add Bearer With ID 1 To UE With ID 11
+
+	# Act
+	Start Traffic With Negative Throughput    11    1
+
+	# Assert
+	Verify Traffic Rejection For Negative Throughput
+
+06 Throughput Statistics Should Not Be Negative
+	[Documentation]    Verifies that even with invalid input, reporting stats (tx/rx) do not become negative.
+	[Tags]    exploratory    traffic    stats    negative
+	# Arrange
+	Prepare Clean EPC Environment
+	Attach UE To Network    12
+	Add Bearer With ID 1 To UE With ID 12
+
+	# Act
+	Start Traffic With Negative Throughput    12    1
+	Retrieve Traffic Statistics    12    1
+
+	# Assert
+	Verify Statistics Are Non-Negative
+
 *** Keywords ***
 
 Check Traffic For Invalid UE ID
@@ -94,5 +123,24 @@ End Traffic For Invalid Bearer ID
 Verify End Traffic Error For Invalid Bearer ID
 	Response Status Should Be    ${INVALID_BEARER_STOP_RESPONSE}    400
 	Response Should Contain Message    ${INVALID_BEARER_STOP_RESPONSE}    Bearer not found
+
+Start Traffic With Negative Throughput
+	[Arguments]    ${ue_id}    ${bearer_id}
+	${resp}=    Start Traffic    ${ue_id}    ${bearer_id}    ${TRAFFIC_PROTOCOL}    -1
+	Set Test Variable    ${NEGATIVE_TRAFFIC_RESPONSE}    ${resp}
+
+Verify Traffic Rejection For Negative Throughput
+	Should Not Be Equal As Integers    ${NEGATIVE_TRAFFIC_RESPONSE.status_code}    200
+
+Retrieve Traffic Statistics
+	[Arguments]    ${ue_id}    ${bearer_id}
+	${resp}=    Check Traffic    ${ue_id}    ${bearer_id}
+	Set Test Variable    ${TRAFFIC_STATS_RESPONSE}    ${resp}
+
+Verify Statistics Are Non-Negative
+	${tx}=    Get From Dictionary    ${TRAFFIC_STATS_RESPONSE.json()}    tx_bps
+	${rx}=    Get From Dictionary    ${TRAFFIC_STATS_RESPONSE.json()}    rx_bps
+	Should Be True    ${tx} >= 0
+	Should Be True    ${rx} >= 0
 
 
