@@ -25,3 +25,7 @@ Stop Traffic For Nonexistent Bearer
 	[Arguments]    ${ue_id}    ${bearer_id}
 	${resp}=    Stop Traffic    ${ue_id}    ${bearer_id}
 	Set Test Variable    ${NONEXISTENT_BEARER_STOP_RESPONSE}    ${resp}
+
+Verify Delete Traffic Error For Nonexistent Bearer
+	Response Status Should Be    ${NONEXISTENT_BEARER_STOP_RESPONSE}    400
+	Response Should Contain Message    ${NONEXISTENT_BEARER_STOP_RESPONSE}    Bearer not found
