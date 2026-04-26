@@ -197,7 +197,7 @@ Start Traffic On Inactive Bearer
     Set Test Variable    ${START_TRAFFIC_INACTIVE_BEARER_RESPONSE}    ${resp}
 
 Verify Start Traffic Fails For Inactive Bearer
-    Response Status Should Be    ${START_TRAFFIC_INACTIVE_BEARER_RESPONSE}    400
+    Response Status Should Be    ${START_TRAFFIC_INACTIVE_BEARER_RESPONSE}    422
     Response Should Contain Message    ${START_TRAFFIC_INACTIVE_BEARER_RESPONSE}    Bearer not found
 
 Start Traffic With Invalid UE ID
@@ -205,7 +205,7 @@ Start Traffic With Invalid UE ID
     Set Test Variable    ${START_TRAFFIC_INVALID_UE_RESPONSE}    ${resp}
 
 Verify Start Traffic Fails For Invalid UE ID
-    Response Status Should Be    ${START_TRAFFIC_INVALID_UE_RESPONSE}    400
+    Response Status Should Be    ${START_TRAFFIC_INVALID_UE_RESPONSE}    422
     Response Should Contain Message    ${START_TRAFFIC_INVALID_UE_RESPONSE}    UE not found
 
 Start Traffic With UE Not Attached
@@ -213,7 +213,7 @@ Start Traffic With UE Not Attached
     Set Test Variable    ${START_TRAFFIC_NOT_ATTACHED_RESPONSE}    ${resp}
 
 Verify Start Traffic Fails For UE Not Attached
-    Response Status Should Be    ${START_TRAFFIC_NOT_ATTACHED_RESPONSE}    400
+    Response Status Should Be    ${START_TRAFFIC_NOT_ATTACHED_RESPONSE}    422
     Response Should Contain Message    ${START_TRAFFIC_NOT_ATTACHED_RESPONSE}    UE not found
 
 Start Traffic With Kbps Only

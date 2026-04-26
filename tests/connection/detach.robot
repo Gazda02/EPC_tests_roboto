@@ -57,7 +57,7 @@ Detach UE That Is Not Connected
     Set Test Variable    ${DETACH_NOT_CONNECTED_RESPONSE}    ${resp}
 
 Verify Detach Fails For Not Connected UE
-    Response Status Should Be    ${DETACH_NOT_CONNECTED_RESPONSE}    400
+    Response Status Should Be    ${DETACH_NOT_CONNECTED_RESPONSE}    422
     Response Should Contain Message    ${DETACH_NOT_CONNECTED_RESPONSE}    UE not found
 
 Detach UE With Invalid ID
@@ -65,4 +65,4 @@ Detach UE With Invalid ID
     Set Test Variable    ${DETACH_INVALID_RESPONSE}    ${resp}
 
 Verify Detach Fails For Invalid UE ID
-    Response Status Should Be    ${DETACH_INVALID_RESPONSE}    400
+    Response Status Should Be    ${DETACH_INVALID_RESPONSE}    422
