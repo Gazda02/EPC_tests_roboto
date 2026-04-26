@@ -24,6 +24,18 @@ Resource          ../../resources/EPC_Common.robot
     Verify First Attach Succeeds
     Verify Second Attach Fails As Duplicate
 
+03 Attach UE With ID 0
+    [Documentation]    Verifies attach with ue_id=0 according to documentation range 0-100.
+    [Tags]    connection    documentation-gap    attach-zero
+    # Arrange
+    Prepare Clean EPC Environment
+
+    # Act
+    Attach UE With Zero ID
+
+    # Assert
+    Verify Attach With Zero ID Should Succeed
+
 *** Keywords ***
 Attach UE First Time
     ${resp}=    Attach UE    ${UE_VALID}
@@ -41,3 +53,13 @@ Verify First Attach Succeeds
 Verify Second Attach Fails As Duplicate
     Response Status Should Be    ${SECOND_ATTACH_RESPONSE}    400
     Response Should Contain Message    ${SECOND_ATTACH_RESPONSE}    already
+
+Attach UE With Zero ID
+    ${resp}=    Attach UE    0
+    Set Test Variable    ${ZERO_ATTACH_RESPONSE}    ${resp}
+
+Verify Attach With Zero ID Should Succeed
+    Response Status Should Be    ${ZERO_ATTACH_RESPONSE}    200
+    Response Should Contain Key    ${ZERO_ATTACH_RESPONSE}    status
+    Response JSON Field Should Be    ${ZERO_ATTACH_RESPONSE}    ue_id    0
+
