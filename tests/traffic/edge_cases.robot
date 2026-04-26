@@ -60,7 +60,7 @@ Resource          ../../resources/EPC_Common.robot
 
 	# Assert
 	Verify Add Bearer With String ID Fails With Type Error
-
+	
 
 *** Keywords ***
 
@@ -94,3 +94,14 @@ Verify Attach With Boolean ID Fails With Type Error
 	Response Status Should Not Be    ${ATTACH_BOOLEAN_ID_RESPONSE}    200
 	# Should reject boolean where numeric expected
 	Should Be True    ${ATTACH_BOOLEAN_ID_RESPONSE.status_code} >= 400
+
+Add Bearer With String ID
+	${string_bearer_id}=    Set Variable    3
+	${body}=    Create Dictionary    bearer_id=${string_bearer_id}
+	${resp}=    POST    /ues/${UE_VALID}/bearers    ${body}
+	Set Test Variable    ${ADD_BEARER_STRING_ID_RESPONSE}    ${resp}
+
+Verify Add Bearer With String ID Fails With Type Error
+	Response Status Should Not Be    ${ADD_BEARER_STRING_ID_RESPONSE}    200
+	# Should reject string where numeric expected
+	Should Be True    ${ADD_BEARER_STRING_ID_RESPONSE.status_code} >= 400
