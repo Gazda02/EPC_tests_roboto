@@ -8,18 +8,19 @@ Resource          ../../resources/EPC_Common.robot
 *** Test Cases ***
 
 
-01 Delete Traffic For Nonexistent Bearer Returns 400
-	[Documentation]    Verifies that DELETE traffic for a nonexistent bearer returns 400 (Bearer not found).
-	[Tags]    traffic    edge-case    nonexistent-bearer
-	# Arrange
-	Prepare Clean EPC Environment
-	Attach The Default UE
+01 Delete Traffic For Nonexistent Bearer Should Fail
+    [Documentation]    Verifies that stopping traffic for a nonexistent bearer is rejected.
+    [Tags]    traffic    edge-case    nonexistent-bearer
 
-	# Act
-	Stop Traffic For Nonexistent Bearer    ${UE_VALID}    99
+    # Arrange
+    Prepare Clean EPC Environment
+    Attach The Default UE
 
-	# Assert
-	Verify Delete Traffic Error For Nonexistent Bearer
+    # Act
+    Stop Traffic For Nonexistent Bearer    ${UE_VALID}    99
+
+    # Assert
+    Verify Delete Traffic Error For Nonexistent Bearer
 
 
 02 Attach UE With String UE ID Should Fail
