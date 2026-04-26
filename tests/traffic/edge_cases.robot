@@ -43,3 +43,14 @@ Stop Traffic For Nonexistent Bearer
 Verify Delete Traffic Error For Nonexistent Bearer
 	Response Status Should Be    ${NONEXISTENT_BEARER_STOP_RESPONSE}    400
 	Response Should Contain Message    ${NONEXISTENT_BEARER_STOP_RESPONSE}    Bearer not found
+
+Attach UE With String ID
+	${string_ue_id}=    Set Variable    50
+	${body}=    Create Dictionary    ue_id=${string_ue_id}
+	${resp}=    POST    /ues    ${body}
+	Set Test Variable    ${ATTACH_STRING_ID_RESPONSE}    ${resp}
+
+Verify Attach With String ID Fails With Type Error
+	Response Status Should Not Be    ${ATTACH_STRING_ID_RESPONSE}    200
+	# Should reject string where numeric expected
+	Should Be True    ${ATTACH_STRING_ID_RESPONSE.status_code} >= 400
