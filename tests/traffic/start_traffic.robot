@@ -72,6 +72,58 @@ Resource          ../../resources/EPC_Traffic.robot
     # Assert
     Verify Start Traffic Fails For UE Not Attached
 
+06 Start Traffic With Kbps Only
+    [Documentation]    Verifies that traffic can start with a kbps-only payload as allowed by OpenAPI.
+    [Tags]    traffic    start-traffic    negative    openapi    kbps
+    # Arrange
+    Prepare Clean EPC Environment
+    Attach The Default UE
+
+    # Act
+    Start Traffic With Kbps Only
+
+    # Assert
+    Verify Start Traffic Succeeds For Kbps Only
+
+07 Start Traffic With Bps Only
+    [Documentation]    Verifies that traffic can start with a bps-only payload as allowed by OpenAPI.
+    [Tags]    traffic    start-traffic    negative    openapi    bps
+    # Arrange
+    Prepare Clean EPC Environment
+    Attach The Default UE
+
+    # Act
+    Start Traffic With Bps Only
+
+    # Assert
+    Verify Start Traffic Succeeds For Bps Only
+
+08 Start Traffic With Unsupported Protocol Smtp
+    [Documentation]    Verifies that traffic start rejects an unsupported protocol value (smtp).
+    [Tags]    traffic    start-traffic    negative    invalid-protocol
+    # Arrange
+    Prepare Clean EPC Environment
+    Attach The Default UE
+
+    # Act
+    Start Traffic With Unsupported Protocol    smtp
+
+    # Assert
+    Verify Start Traffic Fails For Unsupported Protocol
+
+09 Start Traffic With Unsupported Protocol Icmp
+    [Documentation]    Verifies that traffic start rejects an unsupported protocol value (icmp).
+    [Tags]    traffic    start-traffic    negative    invalid-protocol
+    # Arrange
+    Prepare Clean EPC Environment
+    Attach The Default UE
+
+    # Act
+    Start Traffic With Unsupported Protocol    icmp
+
+    # Assert
+    Verify Start Traffic Fails For Unsupported Protocol
+
 *** Keywords ***
 Start Traffic With Valid Parameters
     ${resp}=    Start Traffic    ${UE_VALID}    ${BEARER_DEFAULT}    ${TRAFFIC_PROTOCOL}    ${TRAFFIC_VALID}
@@ -118,3 +170,39 @@ Start Traffic With UE Not Attached
 Verify Start Traffic Fails For UE Not Attached
     Response Status Should Be    ${START_TRAFFIC_NOT_ATTACHED_RESPONSE}    400
     Response Should Contain Message    ${START_TRAFFIC_NOT_ATTACHED_RESPONSE}    UE not found
+
+Start Traffic With Kbps Only
+    ${kbps}=    Set Variable    1500
+    ${payload}=    Create Dictionary    protocol=${TRAFFIC_PROTOCOL}    kbps=${kbps}
+    ${resp}=    POST    /ues/${UE_VALID}/bearers/${BEARER_DEFAULT}/traffic    ${payload}
+    Set Test Variable    ${START_TRAFFIC_KBPS_RESPONSE}    ${resp}
+    ${expected_bps}=    Evaluate    int(${kbps}) * 1000
+    Set Test Variable    ${START_TRAFFIC_KBPS_EXPECTED_BPS}    ${expected_bps}
+
+Verify Start Traffic Succeeds For Kbps Only
+    Response Status Should Be    ${START_TRAFFIC_KBPS_RESPONSE}    200
+    Response JSON Field Should Be    ${START_TRAFFIC_KBPS_RESPONSE}    ue_id    ${UE_VALID}
+    Response JSON Field Should Be    ${START_TRAFFIC_KBPS_RESPONSE}    bearer_id    ${BEARER_DEFAULT}
+    Response JSON Field Should Be    ${START_TRAFFIC_KBPS_RESPONSE}    target_bps    ${START_TRAFFIC_KBPS_EXPECTED_BPS}
+
+Start Traffic With Bps Only
+    ${bps}=    Set Variable    500000
+    ${payload}=    Create Dictionary    protocol=udp    bps=${bps}
+    ${resp}=    POST    /ues/${UE_VALID}/bearers/${BEARER_DEFAULT}/traffic    ${payload}
+    Set Test Variable    ${START_TRAFFIC_BPS_RESPONSE}    ${resp}
+    Set Test Variable    ${START_TRAFFIC_BPS_EXPECTED_BPS}    ${bps}
+
+Verify Start Traffic Succeeds For Bps Only
+    Response Status Should Be    ${START_TRAFFIC_BPS_RESPONSE}    200
+    Response JSON Field Should Be    ${START_TRAFFIC_BPS_RESPONSE}    ue_id    ${UE_VALID}
+    Response JSON Field Should Be    ${START_TRAFFIC_BPS_RESPONSE}    bearer_id    ${BEARER_DEFAULT}
+    Response JSON Field Should Be    ${START_TRAFFIC_BPS_RESPONSE}    target_bps    ${START_TRAFFIC_BPS_EXPECTED_BPS}
+
+Start Traffic With Unsupported Protocol
+    [Arguments]    ${protocol}
+    ${payload}=    Create Dictionary    protocol=${protocol}    Mbps=${TRAFFIC_VALID}
+    ${resp}=    POST    /ues/${UE_VALID}/bearers/${BEARER_DEFAULT}/traffic    ${payload}
+    Set Test Variable    ${START_TRAFFIC_UNSUPPORTED_PROTOCOL_RESPONSE}    ${resp}
+
+Verify Start Traffic Fails For Unsupported Protocol
+    Response Status Should Be    ${START_TRAFFIC_UNSUPPORTED_PROTOCOL_RESPONSE}    422
