@@ -89,6 +89,20 @@ Resource          ../../resources/EPC_Common.robot
 	Verify Start Traffic With Boolean Speed Fails With Type Error
 
 
+07 Start Traffic In Uplink Direction UL Should Fail
+	[Documentation]    Verifies that transfer can ONLY be started in downlink (DL) direction. Per spec (line 30): "Transfer danych można rozpocząć tylko w kierunku DL". UL must be rejected.
+	[Tags]    api    edge-case    transfer-direction    compliance
+	# Arrange
+	Prepare Clean EPC Environment
+	Attach The Default UE
+
+	# Act
+	Start Traffic In UL Direction
+
+	# Assert
+	Verify Traffic Started In UL Direction Fails With Invalid Direction Error
+
+
 *** Keywords ***
 
 Stop Traffic For Nonexistent Bearer
