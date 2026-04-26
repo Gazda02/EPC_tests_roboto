@@ -65,3 +65,14 @@ Verify Attach With String ID Fails With Type Error
 	Response Status Should Not Be    ${ATTACH_STRING_ID_RESPONSE}    200
 	# Should reject string where numeric expected
 	Should Be True    ${ATTACH_STRING_ID_RESPONSE.status_code} >= 400
+
+Attach UE With Boolean True ID
+	${boolean_id}=    Evaluate    True
+	${body}=    Create Dictionary    ue_id=${boolean_id}
+	${resp}=    POST    /ues    ${body}
+	Set Test Variable    ${ATTACH_BOOLEAN_ID_RESPONSE}    ${resp}
+
+Verify Attach With Boolean ID Fails With Type Error
+	Response Status Should Not Be    ${ATTACH_BOOLEAN_ID_RESPONSE}    200
+	# Should reject boolean where numeric expected
+	Should Be True    ${ATTACH_BOOLEAN_ID_RESPONSE.status_code} >= 400
