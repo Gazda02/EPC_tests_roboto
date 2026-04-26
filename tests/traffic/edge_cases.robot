@@ -168,3 +168,15 @@ Verify Start Traffic With Boolean Speed Fails With Type Error
 	Response Status Should Not Be    ${START_TRAFFIC_BOOLEAN_SPEED_RESPONSE}    200
 	# Should reject boolean where numeric expected
 	Should Be True    ${START_TRAFFIC_BOOLEAN_SPEED_RESPONSE.status_code} >= 400
+
+
+Start Traffic In UL Direction
+	${payload}=    Create Dictionary    protocol=tcp    Mbps=10    direction=UL
+	${resp}=    POST    /ues/${UE_VALID}/bearers/${BEARER_DEFAULT}/traffic    ${payload}
+	Set Test Variable    ${START_TRAFFIC_UL_RESPONSE}    ${resp}
+
+Verify Traffic Started In UL Direction Fails With Invalid Direction Error
+	Response Status Should Not Be    ${START_TRAFFIC_UL_RESPONSE}    200
+	# Per spec: only DL is allowed, UL must fail
+	Should Be True    ${START_TRAFFIC_UL_RESPONSE.status_code} >= 400
+	Response Should Contain Message    ${START_TRAFFIC_UL_RESPONSE}    direction
