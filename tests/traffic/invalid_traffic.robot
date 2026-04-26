@@ -141,3 +141,8 @@ Retrieve Traffic For Nonexistent Bearer
 	[Arguments]    ${ue_id}    ${bearer_id}
 	${resp}=    Check Traffic    ${ue_id}    ${bearer_id}
 	Set Test Variable    ${NONEXISTENT_BEARER_TRAFFIC_RESPONSE}    ${resp}
+
+Verify Traffic For Nonexistent Bearer Returns Error Not Success
+	Response Status Should Not Be    ${NONEXISTENT_BEARER_TRAFFIC_RESPONSE}    200
+	# Per spec and DELETE consistency: must fail, not return empty stats
+	Should Be True    ${NONEXISTENT_BEARER_TRAFFIC_RESPONSE.status_code} >= 400
