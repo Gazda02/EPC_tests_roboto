@@ -137,6 +137,38 @@ Resource          ../../resources/EPC_Traffic.robot
     # Assert
     Verify Start Traffic Fails For Protocol List
 
+11 Start Traffic Exceeds UE Total Limit
+    [Documentation]    Verifies that total traffic across bearers does not exceed 100 Mbps per UE.
+    [Tags]    traffic    start-traffic    negative    ue-limit
+    # Arrange
+    Prepare Clean EPC Environment
+    Attach The Default UE
+    Add Additional Bearer For UE
+
+    # Act
+    Start Traffic On Default Bearer With Speed    80
+    Start Traffic On Additional Bearer With Speed    80
+
+    # Assert
+    Verify Second Start Fails For UE Limit
+
+    # Cleanup
+    Stop Traffic    ${UE_VALID}    ${BEARER_DEFAULT}
+    Stop Traffic    ${UE_VALID}    1
+
+12 Start Traffic With Negative Speed
+    [Documentation]    Verifies that traffic start fails when the speed is negative.
+    [Tags]    traffic    start-traffic    negative    invalid-speed
+    # Arrange
+    Prepare Clean EPC Environment
+    Attach The Default UE
+
+    # Act
+    Start Traffic With Negative Speed
+
+    # Assert
+    Verify Start Traffic Fails For Negative Speed
+
 *** Keywords ***
 Start Traffic With Valid Parameters
     ${resp}=    Start Traffic    ${UE_VALID}    ${BEARER_DEFAULT}    ${TRAFFIC_PROTOCOL}    ${TRAFFIC_VALID}
@@ -229,3 +261,26 @@ Start Traffic With Protocol List
 Verify Start Traffic Fails For Protocol List
     Response Status Should Be    ${START_TRAFFIC_PROTOCOL_LIST_RESPONSE}    422
 
+Add Additional Bearer For UE
+    ${resp}=    Add Bearer    ${UE_VALID}    1
+    Response Status Should Be    ${resp}    200
+
+Start Traffic On Default Bearer With Speed
+    [Arguments]    ${mbps}
+    ${resp}=    Start Traffic    ${UE_VALID}    ${BEARER_DEFAULT}    ${TRAFFIC_PROTOCOL}    ${mbps}
+    Set Test Variable    ${START_TRAFFIC_DEFAULT_SPEED_RESPONSE}    ${resp}
+
+Start Traffic On Additional Bearer With Speed
+    [Arguments]    ${mbps}
+    ${resp}=    Start Traffic    ${UE_VALID}    1    ${TRAFFIC_PROTOCOL}    ${mbps}
+    Set Test Variable    ${START_TRAFFIC_ADDITIONAL_SPEED_RESPONSE}    ${resp}
+
+Verify Second Start Fails For UE Limit
+    Response Status Should Be    ${START_TRAFFIC_ADDITIONAL_SPEED_RESPONSE}    422
+
+Start Traffic With Negative Speed
+    ${resp}=    Start Traffic    ${UE_VALID}    ${BEARER_DEFAULT}    ${TRAFFIC_PROTOCOL}    -1
+    Set Test Variable    ${START_TRAFFIC_NEGATIVE_SPEED_RESPONSE}    ${resp}
+
+Verify Start Traffic Fails For Negative Speed
+    Response Status Should Be    ${START_TRAFFIC_NEGATIVE_SPEED_RESPONSE}    422
