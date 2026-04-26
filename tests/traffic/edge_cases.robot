@@ -6,6 +6,8 @@ Resource          ../../resources/EPC_Common.robot
 
 
 *** Test Cases ***
+
+
 01 Delete Traffic For Nonexistent Bearer Returns 400
 	[Documentation]    Verifies that DELETE traffic for a nonexistent bearer returns 400 (Bearer not found).
 	[Tags]    traffic    edge-case    nonexistent-bearer
@@ -32,6 +34,7 @@ Resource          ../../resources/EPC_Common.robot
 	# Assert
 	Verify Attach With String ID Fails With Type Error
 
+
 03 Attach UE With Boolean True For UE ID Should Fail
 	[Documentation]    Verifies that API rejects boolean TRUE for numeric fields. Per spec: ue_id must be numeric integer.
 	[Tags]    api    edge-case    type-coercion    boolean    compliance
@@ -43,6 +46,21 @@ Resource          ../../resources/EPC_Common.robot
 
 	# Assert
 	Verify Attach With Boolean ID Fails With Type Error
+
+
+04 Add Bearer With String Bearer ID Should Fail
+	[Documentation]    Verifies that API rejects string values for bearer_id parameter. Per spec: bearer_id must be numeric.
+	[Tags]    api    edge-case    type-coercion    string    compliance
+	# Arrange
+	Prepare Clean EPC Environment
+	Attach The Default UE
+
+	# Act
+	Add Bearer With String ID
+
+	# Assert
+	Verify Add Bearer With String ID Fails With Type Error
+
 
 *** Keywords ***
 
