@@ -32,6 +32,17 @@ Resource          ../../resources/EPC_Common.robot
 	# Assert
 	Verify Attach With String ID Fails With Type Error
 
+03 Attach UE With Boolean True For UE ID Should Fail
+	[Documentation]    Verifies that API rejects boolean TRUE for numeric fields. Per spec: ue_id must be numeric integer.
+	[Tags]    api    edge-case    type-coercion    boolean    compliance
+	# Arrange
+	Prepare Clean EPC Environment
+
+	# Act
+	Attach UE With Boolean True ID
+
+	# Assert
+	Verify Attach With Boolean ID Fails With Type Error
 
 *** Keywords ***
 
