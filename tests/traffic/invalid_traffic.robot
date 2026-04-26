@@ -114,8 +114,14 @@ Check Traffic For Invalid Bearer ID
 	Set Test Variable    ${INVALID_BEARER_TRAFFIC_RESPONSE}    ${resp}
 
 Verify Traffic Check Result For Invalid Bearer ID
-	Response Status Should Be    ${INVALID_BEARER_TRAFFIC_RESPONSE}    400
-	Response Should Contain Message    ${INVALID_BEARER_TRAFFIC_RESPONSE}    Bearer not found
+	Response Status Should Be    ${INVALID_BEARER_TRAFFIC_RESPONSE}    200
+	Response JSON Field Should Be    ${INVALID_BEARER_TRAFFIC_RESPONSE}    ue_id    ${UE_VALID}
+	Response JSON Field Should Be    ${INVALID_BEARER_TRAFFIC_RESPONSE}    bearer_id    ${BEARER_INVALID}
+	Response JSON Field Should Be    ${INVALID_BEARER_TRAFFIC_RESPONSE}    protocol    ${None}
+	Response JSON Field Should Be    ${INVALID_BEARER_TRAFFIC_RESPONSE}    target_bps    ${None}
+	Response JSON Field Should Be    ${INVALID_BEARER_TRAFFIC_RESPONSE}    tx_bps    0
+	Response JSON Field Should Be    ${INVALID_BEARER_TRAFFIC_RESPONSE}    rx_bps    0
+	Response Should Contain Key    ${INVALID_BEARER_TRAFFIC_RESPONSE}    duration
 
 End Traffic For Invalid UE ID
 	${resp}=    Stop Traffic    ${UE_INVALID}    ${BEARER_DEFAULT}
