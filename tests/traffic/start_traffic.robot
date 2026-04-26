@@ -137,7 +137,20 @@ Resource          ../../resources/EPC_Traffic.robot
     # Assert
     Verify Start Traffic Fails For Protocol List
 
-11 Start Traffic Exceeds UE Total Limit
+11 Start Traffic With Extra Field
+    [Documentation]    Verifies that traffic start rejects payloads with unexpected fields.
+    [Tags]    traffic    start-traffic    negative    validation    extra-field
+    # Arrange
+    Prepare Clean EPC Environment
+    Attach The Default UE
+
+    # Act
+    Start Traffic With Extra Field
+
+    # Assert
+    Verify Start Traffic Fails For Extra Field
+
+12 Start Traffic Exceeds UE Total Limit
     [Documentation]    Verifies that total traffic across bearers does not exceed 100 Mbps per UE.
     [Tags]    traffic    start-traffic    negative    ue-limit
     # Arrange
@@ -156,7 +169,7 @@ Resource          ../../resources/EPC_Traffic.robot
     Stop Traffic    ${UE_VALID}    ${BEARER_DEFAULT}
     Stop Traffic    ${UE_VALID}    1
 
-12 Start Traffic With Negative Speed
+13 Start Traffic With Negative Speed
     [Documentation]    Verifies that traffic start fails when the speed is negative.
     [Tags]    traffic    start-traffic    negative    invalid-speed
     # Arrange
@@ -260,6 +273,14 @@ Start Traffic With Protocol List
 
 Verify Start Traffic Fails For Protocol List
     Response Status Should Be    ${START_TRAFFIC_PROTOCOL_LIST_RESPONSE}    422
+
+Start Traffic With Extra Field
+    ${payload}=    Create Dictionary    protocol=tcp    Mbps=3    extra=kotek
+    ${resp}=    POST    /ues/${UE_VALID}/bearers/${BEARER_DEFAULT}/traffic    ${payload}
+    Set Test Variable    ${START_TRAFFIC_EXTRA_FIELD_RESPONSE}    ${resp}
+
+Verify Start Traffic Fails For Extra Field
+    Response Status Should Be    ${START_TRAFFIC_EXTRA_FIELD_RESPONSE}    422
 
 Add Additional Bearer For UE
     ${resp}=    Add Bearer    ${UE_VALID}    1
