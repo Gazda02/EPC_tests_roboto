@@ -103,6 +103,23 @@ Resource          ../../resources/EPC_Common.robot
 	Verify Traffic Started In UL Direction Fails With Invalid Direction Error
 
 
+08 Start Traffic In Downlink Direction DL
+	[Documentation]    Verifies that transfer can still be started in downlink (DL) direction.
+	[Tags]    api    edge-case    transfer-direction    positive
+	# Arrange
+	Prepare Clean EPC Environment
+	Attach The Default UE
+
+	# Act
+	Start Traffic In DL Direction
+
+	# Assert
+	Verify Traffic Started In DL Direction
+
+	# Cleanup
+	Stop Traffic    ${UE_VALID}    ${BEARER_DEFAULT}
+
+
 *** Keywords ***
 
 Stop Traffic For Nonexistent Bearer
@@ -180,3 +197,14 @@ Verify Traffic Started In UL Direction Fails With Invalid Direction Error
 	# Per spec: only DL is allowed, UL must fail
 	Should Be True    ${START_TRAFFIC_UL_RESPONSE.status_code} >= 400
 	Response Should Contain Message    ${START_TRAFFIC_UL_RESPONSE}    direction
+
+
+Start Traffic In DL Direction
+	${payload}=    Create Dictionary    protocol=tcp    Mbps=10    direction=DL
+	${resp}=    POST    /ues/${UE_VALID}/bearers/${BEARER_DEFAULT}/traffic    ${payload}
+	Set Test Variable    ${START_TRAFFIC_DL_RESPONSE}    ${resp}
+
+Verify Traffic Started In DL Direction
+	Response Status Should Be    ${START_TRAFFIC_DL_RESPONSE}    200
+	Response JSON Field Should Be    ${START_TRAFFIC_DL_RESPONSE}    ue_id    ${UE_VALID}
+	Response Should Contain Key    ${START_TRAFFIC_DL_RESPONSE}    target_bps
