@@ -63,7 +63,7 @@ Resource          ../../resources/EPC_Common.robot
 
 05 Start Traffic With String Speed Parameter Should Fail
 	[Documentation]    Verifies that API rejects string values for numeric speed parameters (e.g., "25" instead of 25). Per spec: Mbps must be numeric.
-	[Tags]    api    edge-case    type-coercion    string    
+	[Tags]    api    edge-case    type-coercion    string    traffic    compliance
 	# Arrange
 	Prepare Clean EPC Environment
 	Attach The Default UE
@@ -118,3 +118,14 @@ Verify Add Bearer With String ID Fails With Type Error
 	Response Status Should Not Be    ${ADD_BEARER_STRING_ID_RESPONSE}    200
 	# Should reject string where numeric expected
 	Should Be True    ${ADD_BEARER_STRING_ID_RESPONSE.status_code} >= 400
+	
+Start Traffic With String Speed
+	${string_speed}=    Set Variable    25
+	${payload}=    Create Dictionary    protocol=tcp    Mbps=${string_speed}
+	${resp}=    POST    /ues/${UE_VALID}/bearers/${BEARER_DEFAULT}/traffic    ${payload}
+	Set Test Variable    ${START_TRAFFIC_STRING_SPEED_RESPONSE}    ${resp}
+
+Verify Start Traffic With String Speed Fails With Type Error
+	Response Status Should Not Be    ${START_TRAFFIC_STRING_SPEED_RESPONSE}    200
+	# Should reject string where numeric expected
+	Should Be True    ${START_TRAFFIC_STRING_SPEED_RESPONSE.status_code} >= 400
