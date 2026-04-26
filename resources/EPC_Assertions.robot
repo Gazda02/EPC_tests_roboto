@@ -6,6 +6,10 @@ Response Status Should Be
     [Arguments]    ${resp}    ${expected}
     Should Be Equal As Integers    ${resp.status_code}    ${expected}
 
+Response Status Should Not Be
+    [Arguments]    ${resp}    ${unexpected}
+    Should Not Be Equal As Integers    ${resp.status_code}    ${unexpected}
+
 Response Should Contain Key
     [Arguments]    ${resp}    ${key}
     Dictionary Should Contain Key   ${resp.json()}    ${key}

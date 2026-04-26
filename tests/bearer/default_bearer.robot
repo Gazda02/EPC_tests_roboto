@@ -34,3 +34,17 @@ Test Teardown   Reset EPC
 
     # Assert
     UE With ID 1 Have Bearer With ID 9
+
+
+03 Adding bearer 9 should fail because it is default
+    [Documentation]    Verify that adding bearer 9 fails because it already exists by default.
+    [Tags]    bearer    default    negative
+
+    # Arrange
+    Attach UE With ID 1
+
+    # Act
+    Add Bearer With ID 9 To UE With ID 1 Response With Bad Request
+
+    # Assert
+    UE With ID 1 Have Bearer With ID 9

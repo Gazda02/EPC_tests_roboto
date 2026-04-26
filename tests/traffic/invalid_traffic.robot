@@ -84,6 +84,21 @@ Resource          ../../resources/EPC_Common.robot
 	# Assert
 	Verify Statistics Are Non-Negative
 
+07 Check Traffic For Nonexistent Bearer Must Fail
+    [Documentation]    Verifies that GET traffic for nonexistent bearer returns error (400/404), NOT 200 with fake stats. Per spec: bearer must be active. Consistency with DELETE test 01: both should fail.
+    [Tags]    compliance    traffic    negative    nonexistent-bearer
+
+    # Arrange
+    Prepare Clean EPC Environment
+    Attach The Default UE
+
+    # Act
+    Retrieve Traffic For Nonexistent Bearer    ${UE_VALID}    99
+
+    # Assert
+    Verify Traffic For Nonexistent Bearer Returns Error Not Success
+	
+
 *** Keywords ***
 
 Check Traffic For Invalid UE ID
@@ -143,4 +158,12 @@ Verify Statistics Are Non-Negative
 	Should Be True    ${tx} >= 0
 	Should Be True    ${rx} >= 0
 
+Retrieve Traffic For Nonexistent Bearer
+	[Arguments]    ${ue_id}    ${bearer_id}
+	${resp}=    Check Traffic    ${ue_id}    ${bearer_id}
+	Set Test Variable    ${NONEXISTENT_BEARER_TRAFFIC_RESPONSE}    ${resp}
 
+Verify Traffic For Nonexistent Bearer Returns Error Not Success
+	Response Status Should Not Be    ${NONEXISTENT_BEARER_TRAFFIC_RESPONSE}    200
+	# Per spec and DELETE consistency: must fail, not return empty stats
+	Should Be True    ${NONEXISTENT_BEARER_TRAFFIC_RESPONSE.status_code} >= 400
