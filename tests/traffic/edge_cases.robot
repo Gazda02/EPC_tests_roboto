@@ -60,7 +60,20 @@ Resource          ../../resources/EPC_Common.robot
 
 	# Assert
 	Verify Add Bearer With String ID Fails With Type Error
-	
+
+05 Start Traffic With String Speed Parameter Should Fail
+	[Documentation]    Verifies that API rejects string values for numeric speed parameters (e.g., "25" instead of 25). Per spec: Mbps must be numeric.
+	[Tags]    api    edge-case    type-coercion    string    
+	# Arrange
+	Prepare Clean EPC Environment
+	Attach The Default UE
+
+	# Act
+	Start Traffic With String Speed
+
+	# Assert
+	Verify Start Traffic With String Speed Fails With Type Error
+
 
 *** Keywords ***
 
