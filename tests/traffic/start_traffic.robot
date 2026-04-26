@@ -124,6 +124,19 @@ Resource          ../../resources/EPC_Traffic.robot
     # Assert
     Verify Start Traffic Fails For Unsupported Protocol
 
+10 Start Traffic With Protocol As List
+    [Documentation]    Verifies that traffic start rejects a protocol value provided as a list.
+    [Tags]    traffic    start-traffic    negative    invalid-protocol    type
+    # Arrange
+    Prepare Clean EPC Environment
+    Attach The Default UE
+
+    # Act
+    Start Traffic With Protocol List
+
+    # Assert
+    Verify Start Traffic Fails For Protocol List
+
 *** Keywords ***
 Start Traffic With Valid Parameters
     ${resp}=    Start Traffic    ${UE_VALID}    ${BEARER_DEFAULT}    ${TRAFFIC_PROTOCOL}    ${TRAFFIC_VALID}
@@ -206,3 +219,13 @@ Start Traffic With Unsupported Protocol
 
 Verify Start Traffic Fails For Unsupported Protocol
     Response Status Should Be    ${START_TRAFFIC_UNSUPPORTED_PROTOCOL_RESPONSE}    422
+
+Start Traffic With Protocol List
+    ${protocols}=    Evaluate    ["tcp", "udp", "icmp"]
+    ${payload}=    Create Dictionary    protocol=${protocols}    Mbps=${TRAFFIC_VALID}
+    ${resp}=    POST    /ues/${UE_VALID}/bearers/${BEARER_DEFAULT}/traffic    ${payload}
+    Set Test Variable    ${START_TRAFFIC_PROTOCOL_LIST_RESPONSE}    ${resp}
+
+Verify Start Traffic Fails For Protocol List
+    Response Status Should Be    ${START_TRAFFIC_PROTOCOL_LIST_RESPONSE}    422
+
