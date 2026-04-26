@@ -143,3 +143,14 @@ Verify Start Traffic With String Speed Fails With Type Error
 	Response Status Should Not Be    ${START_TRAFFIC_STRING_SPEED_RESPONSE}    200
 	# Should reject string where numeric expected
 	Should Be True    ${START_TRAFFIC_STRING_SPEED_RESPONSE.status_code} >= 400
+
+Start Traffic With Boolean Speed
+	${boolean_speed}=    Evaluate    True
+	${payload}=    Create Dictionary    protocol=udp    Mbps=${boolean_speed}
+	${resp}=    POST    /ues/${UE_VALID}/bearers/${BEARER_DEFAULT}/traffic    ${payload}
+	Set Test Variable    ${START_TRAFFIC_BOOLEAN_SPEED_RESPONSE}    ${resp}
+
+Verify Start Traffic With Boolean Speed Fails With Type Error
+	Response Status Should Not Be    ${START_TRAFFIC_BOOLEAN_SPEED_RESPONSE}    200
+	# Should reject boolean where numeric expected
+	Should Be True    ${START_TRAFFIC_BOOLEAN_SPEED_RESPONSE.status_code} >= 400
