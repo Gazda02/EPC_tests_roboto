@@ -75,6 +75,20 @@ Resource          ../../resources/EPC_Common.robot
 	Verify Start Traffic With String Speed Fails With Type Error
 
 
+06 Start Traffic With Boolean True Speed Parameter Should Fail
+	[Documentation]    Verifies that API rejects boolean TRUE value for numeric speed parameters. Per spec: Mbps must be numeric.
+	[Tags]    api    edge-case    type-coercion    boolean    traffic    compliance
+	# Arrange
+	Prepare Clean EPC Environment
+	Attach The Default UE
+
+	# Act
+	Start Traffic With Boolean Speed
+
+	# Assert
+	Verify Start Traffic With Boolean Speed Fails With Type Error
+
+
 *** Keywords ***
 
 Stop Traffic For Nonexistent Bearer
