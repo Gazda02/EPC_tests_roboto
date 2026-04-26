@@ -19,6 +19,20 @@ Resource          ../../resources/EPC_Common.robot
 	# Assert
 	Verify Delete Traffic Error For Nonexistent Bearer
 
+
+02 Attach UE With String UE ID Should Fail
+	[Documentation]    Verifies that API rejects string values for numeric fields (e.g., ue_id="50" instead of 50). Per spec: ue_id must be numeric.
+	[Tags]    api    edge-case    type-coercion    string    compliance
+	# Arrange
+	Prepare Clean EPC Environment
+
+	# Act
+	Attach UE With String ID
+
+	# Assert
+	Verify Attach With String ID Fails With Type Error
+
+
 *** Keywords ***
 
 Stop Traffic For Nonexistent Bearer
